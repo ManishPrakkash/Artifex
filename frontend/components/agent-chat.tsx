@@ -1,18 +1,48 @@
 "use client"
 
 import type React from "react"
-
 import { useState, useRef, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { Send, Bot } from "lucide-react"
 import type { Message } from "@/types"
-import { simulateAgentResponse } from "@/lib/mock-api"
+
+// Define response function locally to avoid module import issues
+const getAgentResponse = async (message: string): Promise<string> => {
+  await new Promise((resolve) => setTimeout(resolve, 1000 + Math.random() * 500))
+
+  const lowerMessage = message.toLowerCase()
+
+  if (lowerMessage.includes("help") || lowerMessage.includes("support")) {
+    return "I'd be happy to help you! Could you please describe your issue in more detail? I can assist with product inquiries, order tracking, returns, and general questions about our services."
+  }
+
+  if (lowerMessage.includes("order") || lowerMessage.includes("track")) {
+    return "I can help you track your order. Please provide your order number, and I'll look up the current status for you. You can find your order number in the confirmation email we sent you."
+  }
+
+  if (lowerMessage.includes("return") || lowerMessage.includes("refund")) {
+    return "I understand you'd like to process a return or refund. Our return policy allows returns within 30 days of purchase. Would you like me to start the return process for you?"
+  }
+
+  if (lowerMessage.includes("price") || lowerMessage.includes("cost")) {
+    return "I can help you with pricing information. Which product or service are you interested in learning more about?"
+  }
+
+  return "Thank you for your message! I'm here to assist you with any questions or concerns. How can I help you today?"
+}
+
+// Counter for generating unique IDs
+let agentMessageCounter = 0
+const generateAgentMessageId = (prefix: string): string => {
+  agentMessageCounter += 1
+  return `agent-${prefix}-${agentMessageCounter}-${Date.now()}`
+}
 
 export function AgentChat() {
   const [messages, setMessages] = useState<Message[]>([
     {
-      id: "welcome",
+      id: "welcome-message",
       role: "assistant",
       content:
         "Hello! I'm your newly created AI agent. I'm here to help with customer support inquiries. How can I assist you today?",
@@ -36,7 +66,7 @@ export function AgentChat() {
     if (!input.trim() || isLoading) return
 
     const userMessage: Message = {
-      id: Date.now().toString(),
+      id: generateAgentMessageId("user"),
       role: "user",
       content: input.trim(),
       timestamp: new Date(),
@@ -47,11 +77,11 @@ export function AgentChat() {
     setIsLoading(true)
 
     try {
-      const response = await simulateAgentResponse(input)
+      const response = await getAgentResponse(input)
       setMessages((prev) => [
         ...prev,
         {
-          id: (Date.now() + 1).toString(),
+          id: generateAgentMessageId("assistant"),
           role: "assistant",
           content: response,
           timestamp: new Date(),
@@ -91,9 +121,8 @@ export function AgentChat() {
         {messages.map((message) => (
           <div
             key={message.id}
-            className={`flex items-start gap-3 animate-slide-in ${
-              message.role === "user" ? "justify-end" : "justify-start"
-            }`}
+            className={`flex items-start gap-3 animate-slide-in ${message.role === "user" ? "justify-end" : "justify-start"
+              }`}
           >
             {message.role === "assistant" && (
               <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center flex-shrink-0">
@@ -101,11 +130,10 @@ export function AgentChat() {
               </div>
             )}
             <div
-              className={`max-w-[85%] p-3 rounded-lg text-sm leading-relaxed ${
-                message.role === "user"
+              className={`max-w-[85%] p-3 rounded-lg text-sm leading-relaxed ${message.role === "user"
                   ? "bg-blue-600 text-white rounded-br-sm"
                   : "bg-white text-slate-800 rounded-bl-sm border border-slate-200"
-              }`}
+                }`}
             >
               {message.content}
             </div>
