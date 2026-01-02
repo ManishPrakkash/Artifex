@@ -11,6 +11,7 @@ import { generateAgentSteps, type AgentStep } from "@/lib/mock-api"
 interface ChatInterfaceProps {
   initialMessage: string
   onFirstResponse: () => void
+  onBuildComplete: () => void
 }
 
 interface ChatMessage {
@@ -27,7 +28,7 @@ const generateMessageId = (prefix: string): string => {
   return `${prefix}-${messageIdCounter}-${Math.random().toString(36).substr(2, 9)}`
 }
 
-export function ChatInterface({ initialMessage, onFirstResponse }: ChatInterfaceProps) {
+export function ChatInterface({ initialMessage, onFirstResponse, onBuildComplete }: ChatInterfaceProps) {
   const [messages, setMessages] = useState<ChatMessage[]>([])
   const [currentSteps, setCurrentSteps] = useState<AgentStep[]>([])
   const [input, setInput] = useState("")
@@ -111,8 +112,12 @@ export function ChatInterface({ initialMessage, onFirstResponse }: ChatInterface
       scrollToBottom()
     }
 
-    // All steps complete - show success message AFTER steps
-    await new Promise(resolve => setTimeout(resolve, 500))
+    // All steps complete - wait a moment then trigger build animation on right panel
+    await new Promise(resolve => setTimeout(resolve, 800))
+    onBuildComplete()
+
+    // Show success message shortly after build starts (while building animation is running)
+    await new Promise(resolve => setTimeout(resolve, 1200))
 
     setSuccessMessage("🎉 Your agent has been successfully built! You can now test it in the chat tab or view its configuration in the config tab. The agent is ready for deployment with all the tools and capabilities you requested.")
 
@@ -196,7 +201,7 @@ export function ChatInterface({ initialMessage, onFirstResponse }: ChatInterface
             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-500 to-green-600 flex items-center justify-center flex-shrink-0">
               <Zap className="w-4 h-4 text-white" />
             </div>
-            <div className="bg-gradient-to-br from-emerald-500/10 to-green-500/10 text-slate-200 p-4 rounded-2xl rounded-bl-sm text-sm max-w-[85%] border border-emerald-500/30">
+            <div className="bg-teal-900/40 text-slate-200 p-4 rounded-2xl rounded-bl-sm text-sm max-w-[85%] border border-teal-700/50 backdrop-blur-sm">
               {successMessage}
             </div>
           </div>
