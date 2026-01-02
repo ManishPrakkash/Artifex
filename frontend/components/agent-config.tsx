@@ -11,14 +11,12 @@ import { Download, Settings, Network, Save, X, Key, Info } from "lucide-react"
 import { AgentGraph } from "./agent-graph"
 import { CodeEditor } from "./code-editor"
 import { TipTapEditor } from "./tiptap-editor"
-import type { AgentProjectConfig, AgentConfig, ToolConfig } from "@/types/agent-config"
-import { fetchAgentConfig, updateAgent, updateTool } from "@/lib/agent-api"
-import { codeGenerator } from "@/lib/code-generator"
+import type { AgentProjectConfig, AgentConfig as AgentConfigType, ToolConfig } from "@/types/agent-config"
 
 interface EditingState {
   type: "agent" | "tool" | null
   id: string | null
-  data: AgentConfig | ToolConfig | null
+  data: AgentConfigType | ToolConfig | null
 }
 
 export function AgentConfig() {
@@ -35,6 +33,7 @@ export function AgentConfig() {
   useEffect(() => {
     const loadConfig = async () => {
       try {
+        const { fetchAgentConfig } = await import("@/lib/agent-api")
         const data = await fetchAgentConfig()
         setConfig(data)
       } catch (error) {
@@ -76,8 +75,9 @@ export function AgentConfig() {
 
     setSaving(true)
     try {
+      const { updateAgent, updateTool } = await import("@/lib/agent-api")
       if (editingState.type === "agent") {
-        const agentData = editingState.data as AgentConfig
+        const agentData = editingState.data as AgentConfigType
         await updateAgent(editingState.id, agentData)
         setConfig({
           ...config,
@@ -111,7 +111,7 @@ export function AgentConfig() {
     setEditingState({ type: null, id: null, data: null })
   }
 
-  const updateEditingData = (updates: Partial<AgentConfig | ToolConfig>) => {
+  const updateEditingData = (updates: Partial<AgentConfigType | ToolConfig>) => {
     if (!editingState.data) return
 
     setEditingState({
@@ -125,6 +125,7 @@ export function AgentConfig() {
 
     setDownloading(true)
     try {
+      const { codeGenerator } = await import("@/lib/code-generator")
       await codeGenerator.generateAndDownload(config)
     } catch (error) {
       console.error("Failed to generate code:", error)
