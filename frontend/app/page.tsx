@@ -25,13 +25,13 @@ export default function Home() {
 
   return (
     <div className="h-screen flex bg-slate-900">
-      {/* Chat Panel - 2/5 width */}
-      <div className="w-2/6 border-r border-slate-800 animate-slide-in">
+      {/* Chat Panel - 1/2 width for better step visibility */}
+      <div className="w-1/2 border-r border-slate-800 animate-slide-in">
         <ChatInterface initialMessage={initialMessage} onFirstResponse={handleFirstResponse} />
       </div>
 
-      {/* Preview Panel - 3/5 width */}
-      <div className="w-4/5 animate-fade-in" style={{ animationDelay: "0.2s" }}>
+      {/* Preview Panel - 1/2 width */}
+      <div className="w-1/2 animate-fade-in" style={{ animationDelay: "0.2s" }}>
         <AppPreview isVisible={showPreview} />
       </div>
     </div>
