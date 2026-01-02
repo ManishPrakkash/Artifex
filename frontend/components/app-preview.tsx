@@ -4,12 +4,22 @@ import { useState, useEffect } from "react"
 import { Progress } from "@/components/ui/progress"
 import { MessageSquare, Settings, Bot, Download, Github } from "lucide-react"
 import type { AppState } from "@/types"
-import { simulateAgentBuilding } from "@/lib/mock-api"
 import { AgentChat } from "./agent-chat"
 import { AgentConfig } from "./agent-config"
 import { Button } from "@/components/ui/button"
-import { codeGenerator } from "@/lib/code-generator"
-import { fetchAgentConfig } from "@/lib/agent-api"
+
+// Local simulation function to avoid module import issues
+const simulateBuildProgress = (onProgress: (progress: number) => void): void => {
+  let progress = 0
+  const interval = setInterval(() => {
+    progress += Math.random() * 15 + 5
+    if (progress >= 100) {
+      progress = 100
+      clearInterval(interval)
+    }
+    onProgress(Math.min(Math.round(progress), 100))
+  }, 500)
+}
 
 interface AppPreviewProps {
   isVisible: boolean
@@ -26,7 +36,7 @@ export function AppPreview({ isVisible }: AppPreviewProps) {
 
   useEffect(() => {
     if (isVisible && appState.isBuilding) {
-      simulateAgentBuilding((progress) => {
+      simulateBuildProgress((progress) => {
         setAppState((prev) => ({ ...prev, progress }))
         if (progress === 100) {
           setTimeout(() => {
@@ -44,10 +54,13 @@ export function AppPreview({ isVisible }: AppPreviewProps) {
   const handleDownloadCode = async () => {
     setDownloading(true)
     try {
+      // Dynamic import to avoid initial load issues
+      const { codeGenerator } = await import("@/lib/code-generator")
+      const { fetchAgentConfig } = await import("@/lib/agent-api")
       const config = await fetchAgentConfig()
       await codeGenerator.generateAndDownload(config)
     } catch (error) {
-      console.error("Failed togenerate code:", error)
+      console.error("Failed to generate code:", error)
     } finally {
       setDownloading(false)
     }
@@ -96,18 +109,16 @@ export function AppPreview({ isVisible }: AppPreviewProps) {
           <div className="flex bg-slate-800 rounded-lg p-1">
             <button
               onClick={() => setActiveTab("chat")}
-              className={`px-3 py-1.5 text-xs font-medium rounded-md transition-colors ${
-                activeTab === "chat" ? "bg-blue-600 text-white" : "text-slate-400 hover:text-white"
-              }`}
+              className={`px-3 py-1.5 text-xs font-medium rounded-md transition-colors ${activeTab === "chat" ? "bg-blue-600 text-white" : "text-slate-400 hover:text-white"
+                }`}
             >
               <MessageSquare className="w-3 h-3 mr-1.5 inline" />
               Chat
             </button>
             <button
               onClick={() => setActiveTab("config")}
-              className={`px-3 py-1.5 text-xs font-medium rounded-md transition-colors ${
-                activeTab === "config" ? "bg-blue-600 text-white" : "text-slate-400 hover:text-white"
-              }`}
+              className={`px-3 py-1.5 text-xs font-medium rounded-md transition-colors ${activeTab === "config" ? "bg-blue-600 text-white" : "text-slate-400 hover:text-white"
+                }`}
             >
               <Settings className="w-3 h-3 mr-1.5 inline" />
               Config
