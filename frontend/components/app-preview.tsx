@@ -23,33 +23,47 @@ const simulateBuildProgress = (onProgress: (progress: number) => void): void => 
 
 interface AppPreviewProps {
   isVisible: boolean
+  buildComplete: boolean
 }
 
-export function AppPreview({ isVisible }: AppPreviewProps) {
+export function AppPreview({ isVisible, buildComplete }: AppPreviewProps) {
   const [appState, setAppState] = useState<AppState>({
     isBuilding: true,
     isComplete: false,
     progress: 0,
   })
-  const [activeTab, setActiveTab] = useState<"chat" | "config">("chat")
+  const [activeTab, setActiveTab] = useState<"chat" | "config">("config")
   const [downloading, setDownloading] = useState(false)
 
+  // Update building state based on buildComplete prop
   useEffect(() => {
-    if (isVisible && appState.isBuilding) {
+    if (buildComplete) {
+      // Start building animation
+      setAppState({
+        isBuilding: true,
+        isComplete: false,
+        progress: 0,
+      })
+
+      // Simulate build progress
       simulateBuildProgress((progress) => {
         setAppState((prev) => ({ ...prev, progress }))
         if (progress === 100) {
           setTimeout(() => {
-            setAppState((prev) => ({
-              ...prev,
+            setAppState({
               isBuilding: false,
               isComplete: true,
-            }))
+              progress: 100,
+            })
+            // Auto-switch to chat tab after build completes
+            setTimeout(() => {
+              setActiveTab("chat")
+            }, 500)
           }, 500)
         }
       })
     }
-  }, [isVisible, appState.isBuilding])
+  }, [buildComplete])
 
   const handleDownloadCode = async () => {
     setDownloading(true)
@@ -66,7 +80,8 @@ export function AppPreview({ isVisible }: AppPreviewProps) {
     }
   }
 
-  if (!isVisible) {
+  // Show empty state until build is complete
+  if (!buildComplete) {
     return (
       <div className="h-full bg-slate-900 flex items-center justify-center">
         <div className="text-center text-slate-500">
@@ -79,6 +94,7 @@ export function AppPreview({ isVisible }: AppPreviewProps) {
     )
   }
 
+  // Show building animation after success message
   if (appState.isBuilding) {
     return (
       <div className="h-full bg-slate-900 flex items-center justify-center p-8">
