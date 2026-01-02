@@ -1,91 +1,134 @@
 "use client"
 
 import type React from "react"
-
-import { useState, useRef, useEffect } from "react"
+import { useState, useRef, useEffect, useCallback } from "react"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { Send, Zap } from "lucide-react"
-import type { Message } from "@/types"
-import { simulateAIResponse } from "@/lib/mock-api"
+import { StepCard } from "@/components/step-card"
+import { generateAgentSteps, type AgentStep } from "@/lib/mock-api"
 
 interface ChatInterfaceProps {
   initialMessage: string
   onFirstResponse: () => void
 }
 
+interface ChatMessage {
+  id: string
+  type: "user" | "assistant"
+  content: string
+  timestamp: Date
+}
+
+// Counter for generating unique IDs - kept outside component to ensure uniqueness
+let messageIdCounter = 0
+const generateMessageId = (prefix: string): string => {
+  messageIdCounter += 1
+  return `${prefix}-${messageIdCounter}-${Math.random().toString(36).substr(2, 9)}`
+}
+
 export function ChatInterface({ initialMessage, onFirstResponse }: ChatInterfaceProps) {
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: "1",
-      role: "user",
-      content: initialMessage,
-      timestamp: new Date(),
-    },
-  ])
+  const [messages, setMessages] = useState<ChatMessage[]>([])
+  const [currentSteps, setCurrentSteps] = useState<AgentStep[]>([])
   const [input, setInput] = useState("")
-  const [isLoading, setIsLoading] = useState(true)
+  const [isProcessing, setIsProcessing] = useState(false)
+  const [successMessage, setSuccessMessage] = useState<string | null>(null)
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
-  const scrollToBottom = () => {
+  // Use ref to prevent double execution in React Strict Mode
+  const hasInitialized = useRef(false)
+  const isProcessingRef = useRef(false)
+
+  const scrollToBottom = useCallback(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
-  }
+  }, [])
 
   useEffect(() => {
     scrollToBottom()
-  }, [messages])
+  }, [messages, currentSteps, scrollToBottom])
 
+  // Process initial message only once
   useEffect(() => {
-    // Simulate initial AI response
-    const handleInitialResponse = async () => {
-      const response = await simulateAIResponse(initialMessage)
-      setMessages((prev) => [
-        ...prev,
-        {
-          id: Date.now().toString(),
-          role: "assistant",
-          content: response,
-          timestamp: new Date(),
-        },
-      ])
-      setIsLoading(false)
-      onFirstResponse()
+    // Prevent double execution
+    if (hasInitialized.current || !initialMessage || isProcessingRef.current) {
+      return
     }
 
-    handleInitialResponse()
-  }, [initialMessage, onFirstResponse])
+    hasInitialized.current = true
+    isProcessingRef.current = true
+    processUserMessage(initialMessage)
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialMessage])
+
+  const processUserMessage = async (message: string) => {
+    setIsProcessing(true)
+
+    // Add user message with unique ID
+    const userMessage: ChatMessage = {
+      id: generateMessageId("user"),
+      type: "user",
+      content: message,
+      timestamp: new Date(),
+    }
+    setMessages(prev => [...prev, userMessage])
+
+    // Add AI response with unique ID
+    await new Promise(resolve => setTimeout(resolve, 800))
+    const aiMessage: ChatMessage = {
+      id: generateMessageId("assistant"),
+      type: "assistant",
+      content: "Perfect! I'll build that agent for you. Let me analyze your requirements and create a comprehensive solution.",
+      timestamp: new Date(),
+    }
+    setMessages(prev => [...prev, aiMessage])
+
+    // Generate and animate steps
+    const steps = generateAgentSteps(message)
+    setCurrentSteps([])
+
+    // Trigger preview visibility
+    onFirstResponse()
+
+    // Animate through each step
+    for (let i = 0; i < steps.length; i++) {
+      await new Promise(resolve => setTimeout(resolve, 600))
+
+      // Add step in "running" state
+      const runningStep = { ...steps[i], status: "running" as const }
+      setCurrentSteps(prev => [...prev, runningStep])
+
+      scrollToBottom()
+
+      // Wait and complete the step
+      await new Promise(resolve => setTimeout(resolve, 1500 + Math.random() * 1000))
+
+      // Update to completed
+      setCurrentSteps(prev =>
+        prev.map(s => s.id === steps[i].id ? { ...s, status: "completed" as const } : s)
+      )
+
+      scrollToBottom()
+    }
+
+    // All steps complete - show success message AFTER steps
+    await new Promise(resolve => setTimeout(resolve, 500))
+
+    setSuccessMessage("🎉 Your agent has been successfully built! You can now test it in the chat tab or view its configuration in the config tab. The agent is ready for deployment with all the tools and capabilities you requested.")
+
+    setIsProcessing(false)
+    isProcessingRef.current = false
+    scrollToBottom()
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!input.trim() || isLoading) return
+    if (!input.trim() || isProcessing) return
 
-    const userMessage: Message = {
-      id: Date.now().toString(),
-      role: "user",
-      content: input.trim(),
-      timestamp: new Date(),
-    }
-
-    setMessages((prev) => [...prev, userMessage])
+    const message = input.trim()
     setInput("")
-    setIsLoading(true)
-
-    try {
-      const response = await simulateAIResponse(input)
-      setMessages((prev) => [
-        ...prev,
-        {
-          id: (Date.now() + 1).toString(),
-          role: "assistant",
-          content: response,
-          timestamp: new Date(),
-        },
-      ])
-    } catch (error) {
-      console.error("Error getting AI response:", error)
-    } finally {
-      setIsLoading(false)
-    }
+    isProcessingRef.current = true
+    await processUserMessage(message)
   }
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -98,7 +141,7 @@ export function ChatInterface({ initialMessage, onFirstResponse }: ChatInterface
   return (
     <div className="h-full flex flex-col bg-slate-900">
       {/* Header */}
-      <div className="p-4 border-b border-slate-800 flex items-center gap-3">
+      <div className="p-4 border-b border-slate-800 flex items-center gap-3 flex-shrink-0">
         <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
           <Zap className="w-4 h-4 text-white" />
         </div>
@@ -108,78 +151,77 @@ export function ChatInterface({ initialMessage, onFirstResponse }: ChatInterface
         </div>
       </div>
 
-      {/* Messages */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+      {/* Messages and Steps */}
+      <div className="flex-1 overflow-y-auto p-4 space-y-6">
         {messages.map((message) => (
-          <div
-            key={message.id}
-            className={`flex items-start gap-3 animate-slide-in ${
-              message.role === "user" ? "justify-end" : "justify-start"
-            }`}
-          >
-            {message.role === "assistant" && (
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center flex-shrink-0">
-                <Zap className="w-4 h-4 text-white" />
+          <div key={message.id} className="animate-slide-in">
+            {message.type === "user" && (
+              <div className="flex justify-end mb-4">
+                <div className="flex items-start gap-3 max-w-[85%]">
+                  <div className="bg-blue-600 text-white p-3 rounded-2xl rounded-br-sm text-sm">
+                    {message.content}
+                  </div>
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-orange-500 to-pink-500 flex items-center justify-center flex-shrink-0">
+                    <span className="text-xs font-bold text-white">U</span>
+                  </div>
+                </div>
               </div>
             )}
-            <div
-              className={`max-w-[85%] p-3 rounded-lg text-sm leading-relaxed ${
-                message.role === "user"
-                  ? "bg-blue-600 text-white rounded-br-sm"
-                  : "bg-slate-800 text-slate-200 rounded-bl-sm"
-              }`}
-            >
-              {message.content}
-            </div>
-            {message.role === "user" && (
-              <div className="w-8 h-8 rounded-lg bg-slate-700 flex items-center justify-center flex-shrink-0">
-                <div className="w-5 h-5 rounded-full bg-slate-500 flex items-center justify-center">
-                  <span className="text-xs font-medium text-white">U</span>
+
+            {message.type === "assistant" && (
+              <div className="flex items-start gap-3 mb-4">
+                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center flex-shrink-0">
+                  <Zap className="w-4 h-4 text-white" />
+                </div>
+                <div className="bg-slate-800/60 text-slate-200 p-4 rounded-2xl rounded-bl-sm text-sm max-w-[85%] border border-slate-700/50">
+                  {message.content}
                 </div>
               </div>
             )}
           </div>
         ))}
 
-        {isLoading && (
-          <div className="flex items-start gap-3 animate-slide-in">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center flex-shrink-0">
+        {/* Current Steps - displayed after messages */}
+        {currentSteps.length > 0 && (
+          <div className="space-y-6 mt-4">
+            {currentSteps.map((step) => (
+              <StepCard key={step.id} step={step} />
+            ))}
+          </div>
+        )}
+
+        {/* Success Message - displayed AFTER all steps complete */}
+        {successMessage && (
+          <div className="flex items-start gap-3 mb-4 mt-6 animate-fade-in">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-500 to-green-600 flex items-center justify-center flex-shrink-0">
               <Zap className="w-4 h-4 text-white" />
             </div>
-            <div className="bg-slate-800 text-slate-200 p-3 rounded-lg rounded-bl-sm text-sm">
-              <div className="flex items-center gap-1">
-                <div className="w-2 h-2 bg-slate-500 rounded-full animate-pulse"></div>
-                <div
-                  className="w-2 h-2 bg-slate-500 rounded-full animate-pulse"
-                  style={{ animationDelay: "0.2s" }}
-                ></div>
-                <div
-                  className="w-2 h-2 bg-slate-500 rounded-full animate-pulse"
-                  style={{ animationDelay: "0.4s" }}
-                ></div>
-              </div>
+            <div className="bg-gradient-to-br from-emerald-500/10 to-green-500/10 text-slate-200 p-4 rounded-2xl rounded-bl-sm text-sm max-w-[85%] border border-emerald-500/30">
+              {successMessage}
             </div>
           </div>
         )}
+
         <div ref={messagesEndRef} />
       </div>
 
       {/* Input */}
-      <div className="p-4 border-t border-slate-800">
+      <div className="p-4 border-t border-slate-800 flex-shrink-0">
         <form onSubmit={handleSubmit} className="flex gap-2">
           <Textarea
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="Continue building your agent..."
-            className="flex-1 min-h-[40px] max-h-[120px] bg-slate-800 border-slate-700 text-white placeholder:text-slate-500 resize-none text-sm"
+            placeholder={isProcessing ? "Agent is being built..." : "Continue the conversation..."}
+            disabled={isProcessing}
+            className="flex-1 min-h-[44px] max-h-[120px] bg-slate-800 border-slate-700 text-white placeholder:text-slate-500 resize-none text-sm disabled:opacity-50"
             rows={1}
           />
           <Button
             type="submit"
             size="sm"
-            disabled={!input.trim() || isLoading}
-            className="bg-blue-600 hover:bg-blue-700 text-white self-end"
+            disabled={!input.trim() || isProcessing}
+            className="bg-blue-600 hover:bg-blue-700 text-white self-end h-11 px-4"
           >
             <Send className="w-4 h-4" />
           </Button>
