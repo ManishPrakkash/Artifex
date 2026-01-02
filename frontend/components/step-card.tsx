@@ -59,12 +59,12 @@ export function StepCard({ step, isExpanded = true }: StepCardProps) {
                 <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center text-white text-sm font-bold">
                     {step.stepNumber}
                 </div>
-                <div className="flex-1 bg-slate-800/60 rounded-lg p-4 border border-slate-700/50">
+                <div className="flex-1 bg-white rounded-lg p-4 border border-gray-200 shadow-sm">
                     <div className="flex items-center gap-2 mb-1">
-                        <Settings className="w-4 h-4 text-slate-400" />
-                        <span className="text-white font-medium text-sm">{step.title}</span>
+                        <Settings className="w-4 h-4 text-blue-600" />
+                        <span className="text-gray-900 font-medium text-sm">{step.title}</span>
                     </div>
-                    <p className="text-slate-400 text-sm">{step.description}</p>
+                    <p className="text-gray-600 text-sm">{step.description}</p>
                 </div>
             </div>
 
@@ -75,26 +75,26 @@ export function StepCard({ step, isExpanded = true }: StepCardProps) {
                         <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center">
                             {getStatusIcon()}
                         </div>
-                        <div className="flex-1 bg-slate-800/40 rounded-lg border border-slate-700/50 overflow-hidden">
+                        <div className="flex-1 bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
                             {/* Tool Header */}
-                            <div className="p-4 border-b border-slate-700/50">
+                            <div className="p-4 border-b border-gray-200">
                                 <div className="flex items-center justify-between mb-2">
                                     <div className="flex items-center gap-2">
-                                        <Code2 className="w-4 h-4 text-purple-400" />
-                                        <span className="text-white font-medium text-sm font-mono">
+                                        <Code2 className="w-4 h-4 text-purple-600" />
+                                        <span className="text-gray-900 font-medium text-sm font-mono">
                                             {step.toolName}
                                         </span>
                                     </div>
                                     {getStatusBadge()}
                                 </div>
-                                <p className="text-slate-400 text-sm">{step.toolDescription}</p>
+                                <p className="text-gray-600 text-sm">{step.toolDescription}</p>
                             </div>
 
                             {/* Result */}
                             {step.status === "completed" && step.result && isExpanded && (
-                                <div className="p-4 bg-slate-900/50">
-                                    <div className="text-xs text-slate-500 mb-2">Result:</div>
-                                    <pre className="text-xs text-slate-300 font-mono whitespace-pre-wrap overflow-x-auto bg-slate-900/80 p-3 rounded-lg border border-slate-700/50">
+                                <div className="p-4 bg-gray-50">
+                                    <div className="text-xs text-gray-500 mb-2">Result:</div>
+                                    <pre className="text-xs text-gray-800 font-mono whitespace-pre-wrap overflow-x-auto bg-white p-3 rounded-lg border border-gray-200">
                                         {formatJson(step.result)}
                                     </pre>
                                 </div>
