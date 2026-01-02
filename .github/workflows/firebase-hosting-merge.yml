@@ -26,9 +26,11 @@ jobs:
           version: 8
 
       - name: Install dependencies
+        working-directory: ./frontend
         run: pnpm install --frozen-lockfile
 
       - name: Build frontend
+        working-directory: ./frontend
         run: pnpm build
 
       - name: Deploy to Firebase Hosting
@@ -38,3 +40,4 @@ jobs:
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_ARTIFEX_22767 }}
           channelId: live
           projectId: artifex-22767
+          entryPoint: ./frontend
