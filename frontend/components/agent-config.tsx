@@ -36,14 +36,9 @@ export function AgentConfig() {
     const loadConfig = async () => {
       try {
         const { fetchAgentConfig } = await import("@/lib/agent-api")
-        const data = await fetchAgentConfig()
-        // Update project name and description with dynamic agent info
-        const updatedData = {
-          ...data,
-          project_name: agentInfo.name,
-          description: agentInfo.description,
-        }
-        setConfig(updatedData)
+        // Pass agent info for dynamic config generation
+        const data = await fetchAgentConfig(agentInfo.name, agentInfo.type, agentInfo.description)
+        setConfig(data)
       } catch (error) {
         console.error("Failed to load config:", error)
       } finally {
@@ -51,6 +46,8 @@ export function AgentConfig() {
       }
     }
 
+    // Reset loading state when agent changes
+    setLoading(true)
     loadConfig()
   }, [agentInfo])
 
@@ -124,7 +121,7 @@ export function AgentConfig() {
 
     setEditingState({
       ...editingState,
-      data: { ...editingState.data, ...updates },
+      data: { ...editingState.data, ...updates } as AgentConfigType | ToolConfig,
     })
   }
 
@@ -161,7 +158,7 @@ export function AgentConfig() {
     )
   }
 
-  const editingAgent = editingState.type === "agent" ? (editingState.data as AgentConfig) : null
+  const editingAgent = editingState.type === "agent" ? (editingState.data as AgentConfigType) : null
   const editingTool = editingState.type === "tool" ? (editingState.data as ToolConfig) : null
 
   return (
@@ -262,7 +259,7 @@ export function AgentConfig() {
                           <div>
                             <label className="text-sm font-medium text-slate-700 mb-1 block">Tools</label>
                             <div className="flex flex-wrap gap-1">
-                              {editingAgent.tools.map((tool) => (
+                              {editingAgent.tools.map((tool: string) => (
                                 <Badge key={tool} variant="secondary" className="text-xs">
                                   {tool}
                                 </Badge>
@@ -273,7 +270,7 @@ export function AgentConfig() {
                           <div>
                             <label className="text-sm font-medium text-slate-700 mb-1 block">Sub Agents</label>
                             <div className="flex flex-wrap gap-1">
-                              {editingAgent.sub_agents.map((subAgent) => (
+                              {editingAgent.sub_agents.map((subAgent: string) => (
                                 <Badge key={subAgent} variant="outline" className="text-xs">
                                   {subAgent}
                                 </Badge>
