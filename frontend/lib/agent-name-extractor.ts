@@ -14,12 +14,16 @@ interface AgentNameResult {
  */
 export async function extractAgentName(userInput: string): Promise<AgentNameResult> {
   try {
-    const apiKey = process.env.NEXT_PUBLIC_GOOGLE_API_KEY
+    // For client-side execution, check both process.env and window
+    const apiKey = process.env.NEXT_PUBLIC_GOOGLE_API_KEY || 
+                   (typeof window !== 'undefined' ? (window as any).ENV?.NEXT_PUBLIC_GOOGLE_API_KEY : null)
 
     if (!apiKey) {
       console.warn("Google API key not found, using fallback extraction")
       return fallbackExtractAgentName(userInput)
     }
+
+    console.log("Using Gemini API for agent name extraction...")
 
     const response = await fetch(
       `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=${apiKey}`,
@@ -82,9 +86,11 @@ Respond ONLY with valid JSON in this exact format:
     }
 
     const result = JSON.parse(jsonMatch[0]) as AgentNameResult
+    console.log("✅ Gemini extraction successful:", result.agentName)
     return result
   } catch (error) {
-    console.error("Error extracting agent name with Gemini:", error)
+    console.error("❌ Error extracting agent name with Gemini:", error)
+    console.log("🔄 Falling back to keyword-based extraction")
     return fallbackExtractAgentName(userInput)
   }
 }
@@ -94,6 +100,7 @@ Respond ONLY with valid JSON in this exact format:
  */
 function fallbackExtractAgentName(userInput: string): AgentNameResult {
   const lower = userInput.toLowerCase()
+  console.log("🔍 Using fallback extraction for:", userInput)
 
   // BMI/Health/Weight/Height
   if (

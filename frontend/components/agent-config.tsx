@@ -174,12 +174,6 @@ export function AgentConfig() {
                 <h2 className="text-xl font-bold text-slate-900">{config.project_name}</h2>
                 <p className="text-slate-600 text-sm">{config.description}</p>
               </div>
-              <div className="flex gap-2">
-                <Button size="sm" onClick={handleDownloadCode} disabled={downloading}>
-                  <Download className="w-4 h-4 mr-2" />
-                  {downloading ? "Generating..." : "Download Code"}
-                </Button>
-              </div>
             </div>
 
             <TabsList className="grid w-full grid-cols-2">

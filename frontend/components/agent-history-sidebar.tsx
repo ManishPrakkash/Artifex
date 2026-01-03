@@ -19,10 +19,14 @@ interface AgentHistorySidebarProps {
   onSelectAgent: (agent: AgentHistoryItem & { isFromHistory?: boolean }) => void
   currentAgentId?: string
   isInBuildView?: boolean
+  isOpen?: boolean
+  onOpenChange?: (open: boolean) => void
 }
 
-export function AgentHistorySidebar({ onSelectAgent, currentAgentId, isInBuildView = false }: AgentHistorySidebarProps) {
-  const [isOpen, setIsOpen] = useState(false)
+export function AgentHistorySidebar({ onSelectAgent, currentAgentId, isInBuildView = false, isOpen: externalIsOpen, onOpenChange }: AgentHistorySidebarProps) {
+  const [internalIsOpen, setInternalIsOpen] = useState(false)
+  const isOpen = externalIsOpen !== undefined ? externalIsOpen : internalIsOpen
+  const setIsOpen = onOpenChange || setInternalIsOpen
   const [history, setHistory] = useState<AgentHistoryItem[]>([])
 
   useEffect(() => {
@@ -55,21 +59,21 @@ export function AgentHistorySidebar({ onSelectAgent, currentAgentId, isInBuildVi
 
   return (
     <>
-      {/* Toggle Button - Only visible when sidebar is closed */}
-      {!isOpen && (
+      {/* Toggle Button - Only visible on desktop when sidebar is closed */}
+      {!isOpen && onOpenChange === undefined && (
         <Button
           onClick={() => setIsOpen(true)}
           size="sm"
-          className={`fixed ${isInBuildView ? 'top-4 left-[240px]' : 'top-4 left-4'} z-50 shadow-xl transition-all duration-300 border bg-gradient-to-r from-blue-600 to-purple-600 border-blue-500/50 text-white hover:from-blue-700 hover:to-purple-700 shadow-blue-500/20`}
+          className={`hidden lg:flex fixed ${isInBuildView ? 'top-4 left-4' : 'top-4 left-4'} z-50 shadow-xl transition-all duration-300 border bg-gradient-to-r from-blue-600 to-purple-600 border-blue-500/50 text-white hover:from-blue-700 hover:to-purple-700 shadow-blue-500/20`}
         >
           <History className="w-4 h-4 mr-2" />
-          <span className="font-medium">History</span>
+          <span className="font-medium text-sm">History</span>
         </Button>
       )}
 
       {/* Sidebar */}
       <div
-        className={`fixed top-0 left-0 h-full w-80 bg-slate-900 border-r border-slate-800 z-40 transition-transform duration-300 ${
+        className={`fixed top-0 left-0 h-full w-full sm:w-80 bg-slate-900 border-r border-slate-800 z-40 transition-transform duration-300 ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >

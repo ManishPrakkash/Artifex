@@ -36,16 +36,16 @@ export function LandingPage({ onSubmit }: LandingPageProps) {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-4 sm:p-6 md:p-8">
       <div className="w-full max-w-4xl mx-auto animate-fade-in">
         {/* Brand Header */}
-        <div className="flex items-center justify-center mb-8">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
-              <Zap className="w-6 h-6 text-white" />
+        <div className="flex items-center justify-center mb-6 sm:mb-8">
+          <div className="flex items-center gap-2 sm:gap-3">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
+              <Zap className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
             </div>
             <div className="flex items-center gap-2">
-              <h1 className="text-2xl font-bold text-white">Artifex</h1>
+              <h1 className="text-xl sm:text-2xl font-bold text-white">Artifex</h1>
               <Badge
                 variant="secondary"
                 className="bg-blue-500/10 text-blue-400 border-blue-500/20 px-2 py-0.5 text-xs"
@@ -57,23 +57,23 @@ export function LandingPage({ onSubmit }: LandingPageProps) {
         </div>
 
         {/* Main Heading */}
-        <div className="text-center mb-12">
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4 tracking-tight">Build AI agents with ease</h2>
-          <p className="text-lg text-slate-400 max-w-2xl mx-auto">
+        <div className="text-center mb-8 sm:mb-12">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-3 sm:mb-4 tracking-tight px-4">Build AI agents with ease</h2>
+          <p className="text-base sm:text-lg text-slate-400 max-w-2xl mx-auto px-4">
             Create intelligent AI agents for your business needs. Define their personality, knowledge, and capabilities
             through simple conversation.
           </p>
         </div>
 
         {/* Input Form */}
-        <form onSubmit={handleSubmit} className="mb-8">
+        <form onSubmit={handleSubmit} className="mb-6 sm:mb-8 px-2 sm:px-0">
           <div className="relative max-w-2xl mx-auto">
             <Textarea
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
               placeholder="Describe the AI agent you want to build..."
-              className="min-h-[120px] bg-slate-800/50 border-slate-700 text-white placeholder:text-slate-500 resize-none pr-12 text-sm"
+              className="min-h-[100px] sm:min-h-[120px] bg-slate-800/50 border-slate-700 text-white placeholder:text-slate-500 resize-none pr-12 text-sm"
             />
             <Button
               type="submit"
