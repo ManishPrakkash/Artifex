@@ -1,0 +1,513 @@
+{
+  "domains": [
+    {
+      "id": "management_operations",
+      "displayName": "Management & Operations",
+      "description": "Business management and operational workflow systems",
+      "keywords": [
+        "employee", "project", "task", "inventory", "workflow", "resource", 
+        "scheduling", "payroll", "performance", "management", "operations",
+        "team", "staff", "organization", "hr", "human resource"
+      ],
+      "nodes": [
+        {
+          "id": "employee_management",
+          "label": "Employee Management",
+          "description": "Manage employee data, records, and lifecycle"
+        },
+        {
+          "id": "project_management",
+          "label": "Project Management",
+          "description": "Track projects, milestones, and deliverables"
+        },
+        {
+          "id": "task_management",
+          "label": "Task Management",
+          "description": "Organize and assign tasks to team members"
+        },
+        {
+          "id": "inventory_management",
+          "label": "Inventory Management",
+          "description": "Track stock, supplies, and assets"
+        },
+        {
+          "id": "workflow_automation",
+          "label": "Workflow Automation",
+          "description": "Automate business processes and approvals"
+        },
+        {
+          "id": "resource_planning",
+          "label": "Resource Planning",
+          "description": "Plan and allocate resources efficiently"
+        },
+        {
+          "id": "performance_tracking",
+          "label": "Performance Tracking",
+          "description": "Monitor KPIs and performance metrics"
+        }
+      ],
+      "defaultTools": ["google_search", "load_memory", "load_artifacts"],
+      "uiBlocks": ["chat", "graph", "config"],
+      "agentTypes": ["llm_agent", "sequential_agent"]
+    },
+    {
+      "id": "finance_prediction",
+      "displayName": "Finance & Prediction",
+      "description": "Financial analysis, forecasting, and risk management",
+      "keywords": [
+        "expense", "budget", "financial", "revenue", "forecast", "cost", 
+        "risk", "fraud", "investment", "pricing", "finance", "money",
+        "accounting", "profit", "loss", "prediction", "analytics"
+      ],
+      "nodes": [
+        {
+          "id": "expense_tracking",
+          "label": "Expense Tracking",
+          "description": "Monitor and categorize expenses"
+        },
+        {
+          "id": "budgeting",
+          "label": "Budgeting",
+          "description": "Create and manage budgets"
+        },
+        {
+          "id": "financial_analysis",
+          "label": "Financial Analysis",
+          "description": "Analyze financial data and trends"
+        },
+        {
+          "id": "revenue_forecasting",
+          "label": "Revenue Forecasting",
+          "description": "Predict future revenue streams"
+        },
+        {
+          "id": "risk_assessment",
+          "label": "Risk Assessment",
+          "description": "Evaluate financial risks and exposure"
+        },
+        {
+          "id": "fraud_detection",
+          "label": "Fraud Detection",
+          "description": "Identify suspicious financial activities"
+        },
+        {
+          "id": "pricing_optimization",
+          "label": "Pricing Optimization",
+          "description": "Optimize product and service pricing"
+        }
+      ],
+      "defaultTools": ["google_search", "load_memory", "url_context"],
+      "uiBlocks": ["chat", "graph", "config"],
+      "agentTypes": ["llm_agent", "sequential_agent", "parallel_agent"]
+    },
+    {
+      "id": "medical_health",
+      "displayName": "Medical & Health",
+      "description": "Health monitoring, fitness tracking, and wellness support (non-diagnostic)",
+      "keywords": [
+        "health", "medical", "symptom", "bmi", "fitness", "diet", "patient",
+        "mental health", "wellness", "healthcare", "diagnosis", "treatment",
+        "nutrition", "exercise", "doctor", "hospital"
+      ],
+      "nodes": [
+        {
+          "id": "symptom_analysis",
+          "label": "Symptom Analysis",
+          "description": "Log and track health symptoms (informational only)"
+        },
+        {
+          "id": "bmi_calculation",
+          "label": "BMI Calculation",
+          "description": "Calculate and track body mass index"
+        },
+        {
+          "id": "fitness_tracking",
+          "label": "Fitness Tracking",
+          "description": "Monitor exercise and fitness goals"
+        },
+        {
+          "id": "diet_planning",
+          "label": "Diet Planning",
+          "description": "Create meal plans and nutrition guides"
+        },
+        {
+          "id": "health_monitoring",
+          "label": "Health Monitoring",
+          "description": "Track vital signs and health metrics"
+        },
+        {
+          "id": "mental_health_support",
+          "label": "Mental Health Support",
+          "description": "Provide wellness and mindfulness resources"
+        }
+      ],
+      "defaultTools": ["google_search", "load_memory"],
+      "uiBlocks": ["chat", "config"],
+      "agentTypes": ["llm_agent"],
+      "metadata": {
+        "nonDiagnostic": true,
+        "disclaimer": "This agent provides informational support only and is not a substitute for professional medical advice."
+      }
+    },
+    {
+      "id": "monitoring_observability",
+      "displayName": "Monitoring & Observability",
+      "description": "System monitoring, alerting, and performance tracking",
+      "keywords": [
+        "monitoring", "server", "uptime", "logs", "alerts", "anomaly",
+        "performance", "metrics", "observability", "devops", "infrastructure",
+        "health check", "status", "availability"
+      ],
+      "nodes": [
+        {
+          "id": "system_monitoring",
+          "label": "System Monitoring",
+          "description": "Monitor system health and status"
+        },
+        {
+          "id": "log_analysis",
+          "label": "Log Analysis",
+          "description": "Parse and analyze system logs"
+        },
+        {
+          "id": "uptime_tracking",
+          "label": "Uptime Tracking",
+          "description": "Track service availability and uptime"
+        },
+        {
+          "id": "alerting",
+          "label": "Alerting",
+          "description": "Configure and manage alerts"
+        },
+        {
+          "id": "anomaly_detection",
+          "label": "Anomaly Detection",
+          "description": "Detect unusual patterns in metrics"
+        },
+        {
+          "id": "performance_metrics",
+          "label": "Performance Metrics",
+          "description": "Collect and analyze performance data"
+        }
+      ],
+      "defaultTools": ["url_context", "load_artifacts"],
+      "uiBlocks": ["chat", "graph", "config"],
+      "agentTypes": ["llm_agent", "loop_agent", "sequential_agent"]
+    },
+    {
+      "id": "social_communication",
+      "displayName": "Social & Communication",
+      "description": "Social media management, content moderation, and communication tools",
+      "keywords": [
+        "chat", "social media", "content", "moderation", "sentiment",
+        "community", "notification", "email", "communication", "messaging",
+        "twitter", "facebook", "instagram", "post", "engagement"
+      ],
+      "nodes": [
+        {
+          "id": "chat_assistant",
+          "label": "Chat Assistant",
+          "description": "Conversational AI for customer support"
+        },
+        {
+          "id": "social_media_management",
+          "label": "Social Media Management",
+          "description": "Manage social media posts and engagement"
+        },
+        {
+          "id": "content_moderation",
+          "label": "Content Moderation",
+          "description": "Review and moderate user-generated content"
+        },
+        {
+          "id": "sentiment_analysis",
+          "label": "Sentiment Analysis",
+          "description": "Analyze sentiment in text and comments"
+        },
+        {
+          "id": "community_management",
+          "label": "Community Management",
+          "description": "Engage with and manage communities"
+        },
+        {
+          "id": "email_assistant",
+          "label": "Email Assistant",
+          "description": "Draft and manage email communications"
+        }
+      ],
+      "defaultTools": ["google_search", "load_memory", "url_context"],
+      "uiBlocks": ["chat", "config"],
+      "agentTypes": ["llm_agent", "sequential_agent"]
+    },
+    {
+      "id": "research_analysis",
+      "displayName": "Research & Analysis",
+      "description": "Data analysis, market research, and document processing",
+      "keywords": [
+        "data", "research", "market", "trend", "analysis", "academic",
+        "document", "summarization", "comparison", "study", "survey",
+        "statistics", "insights", "report"
+      ],
+      "nodes": [
+        {
+          "id": "data_analysis",
+          "label": "Data Analysis",
+          "description": "Analyze datasets and extract insights"
+        },
+        {
+          "id": "market_research",
+          "label": "Market Research",
+          "description": "Research market trends and competitors"
+        },
+        {
+          "id": "trend_analysis",
+          "label": "Trend Analysis",
+          "description": "Identify and analyze trends over time"
+        },
+        {
+          "id": "document_analysis",
+          "label": "Document Analysis",
+          "description": "Extract information from documents"
+        },
+        {
+          "id": "summarization",
+          "label": "Summarization",
+          "description": "Create summaries of long content"
+        },
+        {
+          "id": "comparison_analysis",
+          "label": "Comparison Analysis",
+          "description": "Compare multiple options or datasets"
+        }
+      ],
+      "defaultTools": ["google_search", "url_context", "load_artifacts"],
+      "uiBlocks": ["chat", "graph", "config"],
+      "agentTypes": ["llm_agent", "sequential_agent", "parallel_agent"]
+    },
+    {
+      "id": "development_code",
+      "displayName": "Development & Code",
+      "description": "Software development, code review, and DevOps automation",
+      "keywords": [
+        "code", "development", "programming", "bug", "documentation",
+        "api", "devops", "deployment", "testing", "review", "git",
+        "software", "build", "ci/cd", "automation"
+      ],
+      "nodes": [
+        {
+          "id": "code_generation",
+          "label": "Code Generation",
+          "description": "Generate code from requirements"
+        },
+        {
+          "id": "code_review",
+          "label": "Code Review",
+          "description": "Review code for quality and issues"
+        },
+        {
+          "id": "bug_detection",
+          "label": "Bug Detection",
+          "description": "Identify bugs and potential issues"
+        },
+        {
+          "id": "documentation_generation",
+          "label": "Documentation Generation",
+          "description": "Generate technical documentation"
+        },
+        {
+          "id": "api_testing",
+          "label": "API Testing",
+          "description": "Test and validate APIs"
+        },
+        {
+          "id": "devops_automation",
+          "label": "DevOps Automation",
+          "description": "Automate deployment and operations"
+        }
+      ],
+      "defaultTools": ["google_search", "url_context", "load_artifacts"],
+      "uiBlocks": ["chat", "graph", "config", "editor"],
+      "agentTypes": ["llm_agent", "sequential_agent"]
+    },
+    {
+      "id": "education_learning",
+      "displayName": "Education & Learning",
+      "description": "Educational tools, tutoring, and learning management",
+      "keywords": [
+        "education", "learning", "tutoring", "quiz", "curriculum",
+        "teaching", "student", "assessment", "grading", "course",
+        "training", "knowledge", "study", "exam"
+      ],
+      "nodes": [
+        {
+          "id": "tutoring",
+          "label": "Tutoring",
+          "description": "Provide personalized tutoring assistance"
+        },
+        {
+          "id": "quiz_generation",
+          "label": "Quiz Generation",
+          "description": "Create quizzes and assessments"
+        },
+        {
+          "id": "curriculum_planning",
+          "label": "Curriculum Planning",
+          "description": "Design learning curricula"
+        },
+        {
+          "id": "concept_explanation",
+          "label": "Concept Explanation",
+          "description": "Explain complex concepts simply"
+        },
+        {
+          "id": "assessment_grading",
+          "label": "Assessment Grading",
+          "description": "Grade assignments and provide feedback"
+        },
+        {
+          "id": "learning_tracker",
+          "label": "Learning Tracker",
+          "description": "Track learning progress and goals"
+        }
+      ],
+      "defaultTools": ["google_search", "load_memory"],
+      "uiBlocks": ["chat", "config"],
+      "agentTypes": ["llm_agent", "sequential_agent"]
+    },
+    {
+      "id": "prediction_intelligence",
+      "displayName": "Prediction & Intelligence",
+      "description": "Predictive analytics, forecasting, and decision support",
+      "keywords": [
+        "prediction", "forecasting", "intelligence", "behavior", "demand",
+        "recommendation", "decision", "scenario", "ai", "ml", "machine learning",
+        "intent", "pattern", "analytics"
+      ],
+      "nodes": [
+        {
+          "id": "behavior_prediction",
+          "label": "Behavior Prediction",
+          "description": "Predict user behavior patterns"
+        },
+        {
+          "id": "demand_forecasting",
+          "label": "Demand Forecasting",
+          "description": "Forecast product or service demand"
+        },
+        {
+          "id": "user_intent_detection",
+          "label": "User Intent Detection",
+          "description": "Detect and interpret user intentions"
+        },
+        {
+          "id": "recommendation_engine",
+          "label": "Recommendation Engine",
+          "description": "Generate personalized recommendations"
+        },
+        {
+          "id": "decision_support",
+          "label": "Decision Support",
+          "description": "Provide data-driven decision support"
+        },
+        {
+          "id": "scenario_simulation",
+          "label": "Scenario Simulation",
+          "description": "Simulate different scenarios and outcomes"
+        }
+      ],
+      "defaultTools": ["google_search", "load_memory", "url_context"],
+      "uiBlocks": ["chat", "graph", "config"],
+      "agentTypes": ["llm_agent", "parallel_agent", "sequential_agent"]
+    },
+    {
+      "id": "travel_tourism",
+      "displayName": "Travel & Tourism",
+      "description": "Travel planning, booking assistance, and trip management",
+      "keywords": [
+        "travel", "trip", "vacation", "tourism", "destination", "flight",
+        "hotel", "booking", "itinerary", "tour", "journey", "adventure",
+        "holiday", "sightseeing", "accommodation", "transport", "visa",
+        "tourist", "traveler", "planner", "guide", "explore"
+      ],
+      "nodes": [
+        {
+          "id": "destination_research",
+          "label": "Destination Research",
+          "description": "Research and recommend travel destinations"
+        },
+        {
+          "id": "itinerary_planning",
+          "label": "Itinerary Planning",
+          "description": "Create detailed travel itineraries"
+        },
+        {
+          "id": "flight_search",
+          "label": "Flight Search",
+          "description": "Search and compare flight options"
+        },
+        {
+          "id": "hotel_booking",
+          "label": "Hotel Booking",
+          "description": "Find and book accommodations"
+        },
+        {
+          "id": "activity_recommendations",
+          "label": "Activity Recommendations",
+          "description": "Suggest tourist activities and attractions"
+        },
+        {
+          "id": "budget_calculator",
+          "label": "Budget Calculator",
+          "description": "Calculate and manage travel budgets"
+        },
+        {
+          "id": "travel_documentation",
+          "label": "Travel Documentation",
+          "description": "Assist with visa and travel documents"
+        }
+      ],
+      "defaultTools": ["google_search", "load_memory", "url_context"],
+      "uiBlocks": ["chat", "graph", "config"],
+      "agentTypes": ["llm_agent", "sequential_agent"]
+    },
+    {
+      "id": "generic_custom",
+      "displayName": "Generic / Custom",
+      "description": "General-purpose and custom workflow agents",
+      "keywords": [
+        "general", "assistant", "custom", "multi", "domain", "experimental",
+        "generic", "versatile", "flexible", "adaptable", "universal"
+      ],
+      "nodes": [
+        {
+          "id": "general_assistant",
+          "label": "General Assistant",
+          "description": "Multi-purpose AI assistant"
+        },
+        {
+          "id": "multi_domain_agent",
+          "label": "Multi-Domain Agent",
+          "description": "Handle tasks across multiple domains"
+        },
+        {
+          "id": "custom_workflow",
+          "label": "Custom Workflow",
+          "description": "Create custom workflows"
+        },
+        {
+          "id": "task_coordinator",
+          "label": "Task Coordinator",
+          "description": "Coordinate complex multi-step tasks"
+        },
+        {
+          "id": "information_retrieval",
+          "label": "Information Retrieval",
+          "description": "Search and retrieve information"
+        }
+      ],
+      "defaultTools": ["google_search", "load_memory", "url_context", "load_artifacts"],
+      "uiBlocks": ["chat", "graph", "config"],
+      "agentTypes": ["llm_agent", "sequential_agent", "parallel_agent"]
+    }
+  ]
+}

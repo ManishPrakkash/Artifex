@@ -107,6 +107,7 @@ export function ChatInterface({ initialMessage, onFirstResponse, onBuildComplete
       name: extractedInfo.agentName,
       type: extractedInfo.agentType,
       description: extractedInfo.shortDescription,
+      userPrompt: message, // Store original prompt for domain matching
     })
 
     // Add user message with unique ID

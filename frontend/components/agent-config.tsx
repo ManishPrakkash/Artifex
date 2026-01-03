@@ -36,8 +36,13 @@ export function AgentConfig() {
     const loadConfig = async () => {
       try {
         const { fetchAgentConfig } = await import("@/lib/agent-api")
-        // Pass agent info for dynamic config generation
-        const data = await fetchAgentConfig(agentInfo.name, agentInfo.type, agentInfo.description)
+        // Pass agent info and user prompt for domain-based config generation
+        const data = await fetchAgentConfig(
+          agentInfo.name, 
+          agentInfo.type, 
+          agentInfo.description,
+          agentInfo.userPrompt // Use original prompt for accurate domain matching
+        )
         setConfig(data)
       } catch (error) {
         console.error("Failed to load config:", error)
