@@ -60,14 +60,13 @@ export function AgentHistorySidebar({ onSelectAgent, currentAgentId, isInBuildVi
   return (
     <>
       {/* Toggle Button - Only visible on desktop when sidebar is closed */}
-      {!isOpen && onOpenChange === undefined && (
+      {!isOpen && (
         <Button
           onClick={() => setIsOpen(true)}
           size="sm"
-          className={`hidden lg:flex fixed ${isInBuildView ? 'top-4 left-4' : 'top-4 left-4'} z-50 shadow-xl transition-all duration-300 border bg-gradient-to-r from-blue-600 to-purple-600 border-blue-500/50 text-white hover:from-blue-700 hover:to-purple-700 shadow-blue-500/20`}
+          className={`hidden lg:flex fixed ${isInBuildView ? 'top-4 left-4' : 'top-4 left-4'} z-50 shadow-xl bg-slate-800/90 hover:bg-slate-700 border border-slate-700 text-white backdrop-blur-sm p-2`}
         >
-          <History className="w-4 h-4 mr-2" />
-          <span className="font-medium text-sm">History</span>
+          <History className="w-5 h-5" />
         </Button>
       )}
 
@@ -114,10 +113,10 @@ export function AgentHistorySidebar({ onSelectAgent, currentAgentId, isInBuildVi
             ) : (
               <div className="space-y-2">
                 {history.map((agent) => (
-                  <button
+                  <div
                     key={agent.id}
                     onClick={() => handleSelectAgent(agent)}
-                    className={`w-full text-left p-3 rounded-lg border transition-all ${
+                    className={`w-full text-left p-3 rounded-lg border transition-all cursor-pointer ${
                       currentAgentId === agent.id
                         ? "bg-blue-600/20 border-blue-500 ring-2 ring-blue-500/50"
                         : "bg-slate-800/50 border-slate-700 hover:bg-slate-800 hover:border-slate-600"
@@ -132,35 +131,34 @@ export function AgentHistorySidebar({ onSelectAgent, currentAgentId, isInBuildVi
                           {agent.type}
                         </p>
                       </div>
-                      <Button
-                        onClick={(e) => handleDelete(agent.id, e)}
-                        size="sm"
-                        variant="ghost"
-                        className="text-slate-500 hover:text-red-400 hover:bg-red-500/10 ml-2 flex-shrink-0"
-                      >
-                        <Trash2 className="w-3.5 h-3.5" />
-                      </Button>
-                    </div>
-                    
-                    <p className="text-xs text-slate-400 line-clamp-2 mb-2">
-                      {agent.description}
-                    </p>
-                    
-                    <div className="flex items-center gap-1 text-xs text-slate-500">
-                      <Clock className="w-3 h-3" />
-                      <span>
-                        {formatDistanceToNow(new Date(agent.createdAt), { addSuffix: true })}
-                      </span>
-                    </div>
-                  </button>
-                ))}
-              </div>
-            )}
-          </ScrollArea>
+                    <button
+                      onClick={(e) => handleDelete(agent.id, e)}
+                      className="text-slate-500 hover:text-red-400 hover:bg-red-500/10 ml-2 flex-shrink-0 p-1.5 rounded-md transition-colors"
+                      aria-label="Delete agent"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                  
+                  <p className="text-xs text-slate-400 line-clamp-2 mb-2">
+                    {agent.description}
+                  </p>
+                  
+                  <div className="flex items-center gap-1 text-xs text-slate-500">
+                    <Clock className="w-3 h-3" />
+                    <span>
+                      {formatDistanceToNow(new Date(agent.createdAt), { addSuffix: true })}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </ScrollArea>
 
-          {/* Footer */}
-          {history.length > 0 && (
-            <div className="p-4 border-t border-slate-800">
+        {/* Footer */}
+        {history.length > 0 && (
+          <div className="p-4 border-t border-slate-800">
               <Button
                 onClick={handleClearAll}
                 size="sm"
