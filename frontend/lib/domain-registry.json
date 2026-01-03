@@ -5,9 +5,22 @@
       "displayName": "Management & Operations",
       "description": "Business management and operational workflow systems",
       "keywords": [
-        "employee", "project", "task", "inventory", "workflow", "resource", 
-        "scheduling", "payroll", "performance", "management", "operations",
-        "team", "staff", "organization", "hr", "human resource"
+        "employee",
+        "project",
+        "task",
+        "inventory",
+        "workflow",
+        "resource",
+        "scheduling",
+        "payroll",
+        "performance",
+        "management",
+        "operations",
+        "team",
+        "staff",
+        "organization",
+        "hr",
+        "human resource"
       ],
       "nodes": [
         {
@@ -46,18 +59,43 @@
           "description": "Monitor KPIs and performance metrics"
         }
       ],
-      "defaultTools": ["google_search", "load_memory", "load_artifacts"],
-      "uiBlocks": ["chat", "graph", "config"],
-      "agentTypes": ["llm_agent", "sequential_agent"]
+      "defaultTools": [
+        "google_search",
+        "load_memory",
+        "load_artifacts"
+      ],
+      "uiBlocks": [
+        "chat",
+        "graph",
+        "config"
+      ],
+      "agentTypes": [
+        "llm_agent",
+        "sequential_agent"
+      ]
     },
     {
       "id": "finance_prediction",
       "displayName": "Finance & Prediction",
       "description": "Financial analysis, forecasting, and risk management",
       "keywords": [
-        "expense", "budget", "financial", "revenue", "forecast", "cost", 
-        "risk", "fraud", "investment", "pricing", "finance", "money",
-        "accounting", "profit", "loss", "prediction", "analytics"
+        "expense",
+        "budget",
+        "financial",
+        "revenue",
+        "forecast",
+        "cost",
+        "risk",
+        "fraud",
+        "investment",
+        "pricing",
+        "finance",
+        "money",
+        "accounting",
+        "profit",
+        "loss",
+        "prediction",
+        "analytics"
       ],
       "nodes": [
         {
@@ -96,18 +134,43 @@
           "description": "Optimize product and service pricing"
         }
       ],
-      "defaultTools": ["google_search", "load_memory", "url_context"],
-      "uiBlocks": ["chat", "graph", "config"],
-      "agentTypes": ["llm_agent", "sequential_agent", "parallel_agent"]
+      "defaultTools": [
+        "google_search",
+        "load_memory",
+        "url_context"
+      ],
+      "uiBlocks": [
+        "chat",
+        "graph",
+        "config"
+      ],
+      "agentTypes": [
+        "llm_agent",
+        "sequential_agent",
+        "parallel_agent"
+      ]
     },
     {
       "id": "medical_health",
       "displayName": "Medical & Health",
       "description": "Health monitoring, fitness tracking, and wellness support (non-diagnostic)",
       "keywords": [
-        "health", "medical", "symptom", "bmi", "fitness", "diet", "patient",
-        "mental health", "wellness", "healthcare", "diagnosis", "treatment",
-        "nutrition", "exercise", "doctor", "hospital"
+        "health",
+        "medical",
+        "symptom",
+        "bmi",
+        "fitness",
+        "diet",
+        "patient",
+        "mental health",
+        "wellness",
+        "healthcare",
+        "diagnosis",
+        "treatment",
+        "nutrition",
+        "exercise",
+        "doctor",
+        "hospital"
       ],
       "nodes": [
         {
@@ -141,9 +204,17 @@
           "description": "Provide wellness and mindfulness resources"
         }
       ],
-      "defaultTools": ["google_search", "load_memory"],
-      "uiBlocks": ["chat", "config"],
-      "agentTypes": ["llm_agent"],
+      "defaultTools": [
+        "google_search",
+        "load_memory"
+      ],
+      "uiBlocks": [
+        "chat",
+        "config"
+      ],
+      "agentTypes": [
+        "llm_agent"
+      ],
       "metadata": {
         "nonDiagnostic": true,
         "disclaimer": "This agent provides informational support only and is not a substitute for professional medical advice."
@@ -154,9 +225,20 @@
       "displayName": "Monitoring & Observability",
       "description": "System monitoring, alerting, and performance tracking",
       "keywords": [
-        "monitoring", "server", "uptime", "logs", "alerts", "anomaly",
-        "performance", "metrics", "observability", "devops", "infrastructure",
-        "health check", "status", "availability"
+        "monitoring",
+        "server",
+        "uptime",
+        "logs",
+        "alerts",
+        "anomaly",
+        "performance",
+        "metrics",
+        "observability",
+        "devops",
+        "infrastructure",
+        "health check",
+        "status",
+        "availability"
       ],
       "nodes": [
         {
@@ -190,18 +272,41 @@
           "description": "Collect and analyze performance data"
         }
       ],
-      "defaultTools": ["url_context", "load_artifacts"],
-      "uiBlocks": ["chat", "graph", "config"],
-      "agentTypes": ["llm_agent", "loop_agent", "sequential_agent"]
+      "defaultTools": [
+        "url_context",
+        "load_artifacts"
+      ],
+      "uiBlocks": [
+        "chat",
+        "graph",
+        "config"
+      ],
+      "agentTypes": [
+        "llm_agent",
+        "loop_agent",
+        "sequential_agent"
+      ]
     },
     {
       "id": "social_communication",
       "displayName": "Social & Communication",
       "description": "Social media management, content moderation, and communication tools",
       "keywords": [
-        "chat", "social media", "content", "moderation", "sentiment",
-        "community", "notification", "email", "communication", "messaging",
-        "twitter", "facebook", "instagram", "post", "engagement"
+        "chat",
+        "social media",
+        "content",
+        "moderation",
+        "sentiment",
+        "community",
+        "notification",
+        "email",
+        "communication",
+        "messaging",
+        "twitter",
+        "facebook",
+        "instagram",
+        "post",
+        "engagement"
       ],
       "nodes": [
         {
@@ -235,63 +340,140 @@
           "description": "Draft and manage email communications"
         }
       ],
-      "defaultTools": ["google_search", "load_memory", "url_context"],
-      "uiBlocks": ["chat", "config"],
-      "agentTypes": ["llm_agent", "sequential_agent"]
+      "defaultTools": [
+        "google_search",
+        "load_memory",
+        "url_context"
+      ],
+      "uiBlocks": [
+        "chat",
+        "config"
+      ],
+      "agentTypes": [
+        "llm_agent",
+        "sequential_agent"
+      ]
     },
     {
       "id": "research_analysis",
       "displayName": "Research & Analysis",
-      "description": "Data analysis, market research, and document processing",
+      "description": "Comprehensive research tools including web research, literature review, competitive analysis, and fact verification",
       "keywords": [
-        "data", "research", "market", "trend", "analysis", "academic",
-        "document", "summarization", "comparison", "study", "survey",
-        "statistics", "insights", "report"
+        "research",
+        "analysis",
+        "literature",
+        "review",
+        "academic",
+        "web research",
+        "competitive analysis",
+        "competitor",
+        "policy",
+        "law",
+        "legal",
+        "regulation",
+        "notes",
+        "note taking",
+        "fact check",
+        "verification",
+        "verify",
+        "source",
+        "citation",
+        "reference",
+        "bibliography",
+        "paper",
+        "journal",
+        "article",
+        "study",
+        "survey",
+        "data",
+        "market",
+        "trend",
+        "insight",
+        "report",
+        "summarization",
+        "summary",
+        "document",
+        "statistics"
       ],
       "nodes": [
         {
-          "id": "data_analysis",
-          "label": "Data Analysis",
-          "description": "Analyze datasets and extract insights"
+          "id": "web_research",
+          "label": "Web Research",
+          "description": "Search and gather information from web sources"
         },
         {
-          "id": "market_research",
-          "label": "Market Research",
-          "description": "Research market trends and competitors"
+          "id": "literature_review",
+          "label": "Literature Review",
+          "description": "Analyze academic papers, journals, and publications"
         },
         {
-          "id": "trend_analysis",
-          "label": "Trend Analysis",
-          "description": "Identify and analyze trends over time"
+          "id": "competitive_analysis",
+          "label": "Competitive Analysis",
+          "description": "Research competitors, market positioning, and industry trends"
         },
         {
-          "id": "document_analysis",
-          "label": "Document Analysis",
-          "description": "Extract information from documents"
+          "id": "policy_law_research",
+          "label": "Policy & Law Research",
+          "description": "Research policies, regulations, and legal frameworks"
         },
         {
-          "id": "summarization",
-          "label": "Summarization",
-          "description": "Create summaries of long content"
+          "id": "academic_notes",
+          "label": "Academic Notes Generation",
+          "description": "Generate structured notes from academic content"
         },
         {
-          "id": "comparison_analysis",
-          "label": "Comparison Analysis",
-          "description": "Compare multiple options or datasets"
+          "id": "fact_verification",
+          "label": "Fact Verification",
+          "description": "Verify facts and check source credibility"
+        },
+        {
+          "id": "citation_management",
+          "label": "Citation Management",
+          "description": "Manage references and generate citations"
+        },
+        {
+          "id": "data_synthesis",
+          "label": "Data Synthesis",
+          "description": "Combine and synthesize data from multiple sources"
         }
       ],
-      "defaultTools": ["google_search", "url_context", "load_artifacts"],
-      "uiBlocks": ["chat", "graph", "config"],
-      "agentTypes": ["llm_agent", "sequential_agent", "parallel_agent"]
+      "defaultTools": [
+        "google_search",
+        "url_context",
+        "load_artifacts",
+        "load_memory"
+      ],
+      "uiBlocks": [
+        "chat",
+        "graph",
+        "config"
+      ],
+      "agentTypes": [
+        "llm_agent",
+        "sequential_agent",
+        "parallel_agent"
+      ]
     },
     {
       "id": "development_code",
       "displayName": "Development & Code",
       "description": "Software development, code review, and DevOps automation",
       "keywords": [
-        "code", "development", "programming", "bug", "documentation",
-        "api", "devops", "deployment", "testing", "review", "git",
-        "software", "build", "ci/cd", "automation"
+        "code",
+        "development",
+        "programming",
+        "bug",
+        "documentation",
+        "api",
+        "devops",
+        "deployment",
+        "testing",
+        "review",
+        "git",
+        "software",
+        "build",
+        "ci/cd",
+        "automation"
       ],
       "nodes": [
         {
@@ -325,18 +507,41 @@
           "description": "Automate deployment and operations"
         }
       ],
-      "defaultTools": ["google_search", "url_context", "load_artifacts"],
-      "uiBlocks": ["chat", "graph", "config", "editor"],
-      "agentTypes": ["llm_agent", "sequential_agent"]
+      "defaultTools": [
+        "google_search",
+        "url_context",
+        "load_artifacts"
+      ],
+      "uiBlocks": [
+        "chat",
+        "graph",
+        "config",
+        "editor"
+      ],
+      "agentTypes": [
+        "llm_agent",
+        "sequential_agent"
+      ]
     },
     {
       "id": "education_learning",
       "displayName": "Education & Learning",
       "description": "Educational tools, tutoring, and learning management",
       "keywords": [
-        "education", "learning", "tutoring", "quiz", "curriculum",
-        "teaching", "student", "assessment", "grading", "course",
-        "training", "knowledge", "study", "exam"
+        "education",
+        "learning",
+        "tutoring",
+        "quiz",
+        "curriculum",
+        "teaching",
+        "student",
+        "assessment",
+        "grading",
+        "course",
+        "training",
+        "knowledge",
+        "study",
+        "exam"
       ],
       "nodes": [
         {
@@ -370,18 +575,38 @@
           "description": "Track learning progress and goals"
         }
       ],
-      "defaultTools": ["google_search", "load_memory"],
-      "uiBlocks": ["chat", "config"],
-      "agentTypes": ["llm_agent", "sequential_agent"]
+      "defaultTools": [
+        "google_search",
+        "load_memory"
+      ],
+      "uiBlocks": [
+        "chat",
+        "config"
+      ],
+      "agentTypes": [
+        "llm_agent",
+        "sequential_agent"
+      ]
     },
     {
       "id": "prediction_intelligence",
       "displayName": "Prediction & Intelligence",
       "description": "Predictive analytics, forecasting, and decision support",
       "keywords": [
-        "prediction", "forecasting", "intelligence", "behavior", "demand",
-        "recommendation", "decision", "scenario", "ai", "ml", "machine learning",
-        "intent", "pattern", "analytics"
+        "prediction",
+        "forecasting",
+        "intelligence",
+        "behavior",
+        "demand",
+        "recommendation",
+        "decision",
+        "scenario",
+        "ai",
+        "ml",
+        "machine learning",
+        "intent",
+        "pattern",
+        "analytics"
       ],
       "nodes": [
         {
@@ -415,19 +640,49 @@
           "description": "Simulate different scenarios and outcomes"
         }
       ],
-      "defaultTools": ["google_search", "load_memory", "url_context"],
-      "uiBlocks": ["chat", "graph", "config"],
-      "agentTypes": ["llm_agent", "parallel_agent", "sequential_agent"]
+      "defaultTools": [
+        "google_search",
+        "load_memory",
+        "url_context"
+      ],
+      "uiBlocks": [
+        "chat",
+        "graph",
+        "config"
+      ],
+      "agentTypes": [
+        "llm_agent",
+        "parallel_agent",
+        "sequential_agent"
+      ]
     },
     {
       "id": "travel_tourism",
       "displayName": "Travel & Tourism",
       "description": "Travel planning, booking assistance, and trip management",
       "keywords": [
-        "travel", "trip", "vacation", "tourism", "destination", "flight",
-        "hotel", "booking", "itinerary", "tour", "journey", "adventure",
-        "holiday", "sightseeing", "accommodation", "transport", "visa",
-        "tourist", "traveler", "planner", "guide", "explore"
+        "travel",
+        "trip",
+        "vacation",
+        "tourism",
+        "destination",
+        "flight",
+        "hotel",
+        "booking",
+        "itinerary",
+        "tour",
+        "journey",
+        "adventure",
+        "holiday",
+        "sightseeing",
+        "accommodation",
+        "transport",
+        "visa",
+        "tourist",
+        "traveler",
+        "planner",
+        "guide",
+        "explore"
       ],
       "nodes": [
         {
@@ -466,17 +721,37 @@
           "description": "Assist with visa and travel documents"
         }
       ],
-      "defaultTools": ["google_search", "load_memory", "url_context"],
-      "uiBlocks": ["chat", "graph", "config"],
-      "agentTypes": ["llm_agent", "sequential_agent"]
+      "defaultTools": [
+        "google_search",
+        "load_memory",
+        "url_context"
+      ],
+      "uiBlocks": [
+        "chat",
+        "graph",
+        "config"
+      ],
+      "agentTypes": [
+        "llm_agent",
+        "sequential_agent"
+      ]
     },
     {
       "id": "generic_custom",
       "displayName": "Generic / Custom",
       "description": "General-purpose and custom workflow agents",
       "keywords": [
-        "general", "assistant", "custom", "multi", "domain", "experimental",
-        "generic", "versatile", "flexible", "adaptable", "universal"
+        "general",
+        "assistant",
+        "custom",
+        "multi",
+        "domain",
+        "experimental",
+        "generic",
+        "versatile",
+        "flexible",
+        "adaptable",
+        "universal"
       ],
       "nodes": [
         {
@@ -505,9 +780,22 @@
           "description": "Search and retrieve information"
         }
       ],
-      "defaultTools": ["google_search", "load_memory", "url_context", "load_artifacts"],
-      "uiBlocks": ["chat", "graph", "config"],
-      "agentTypes": ["llm_agent", "sequential_agent", "parallel_agent"]
+      "defaultTools": [
+        "google_search",
+        "load_memory",
+        "url_context",
+        "load_artifacts"
+      ],
+      "uiBlocks": [
+        "chat",
+        "graph",
+        "config"
+      ],
+      "agentTypes": [
+        "llm_agent",
+        "sequential_agent",
+        "parallel_agent"
+      ]
     }
   ]
 }
