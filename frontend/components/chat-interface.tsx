@@ -7,11 +7,14 @@ import { Textarea } from "@/components/ui/textarea"
 import { Send, Zap } from "lucide-react"
 import { StepCard } from "@/components/step-card"
 import { generateAgentSteps, type AgentStep } from "@/lib/mock-api"
+import { extractAgentNameClient } from "@/lib/agent-name-extractor"
+import { useAgent } from "@/contexts/agent-context"
 
 interface ChatInterfaceProps {
   initialMessage: string
   onFirstResponse: () => void
   onBuildComplete: () => void
+  skipSteps?: boolean
 }
 
 interface ChatMessage {
@@ -28,13 +31,14 @@ const generateMessageId = (prefix: string): string => {
   return `${prefix}-${messageIdCounter}-${Math.random().toString(36).substr(2, 9)}`
 }
 
-export function ChatInterface({ initialMessage, onFirstResponse, onBuildComplete }: ChatInterfaceProps) {
+export function ChatInterface({ initialMessage, onFirstResponse, onBuildComplete, skipSteps = false }: ChatInterfaceProps) {
   const [messages, setMessages] = useState<ChatMessage[]>([])
   const [currentSteps, setCurrentSteps] = useState<AgentStep[]>([])
   const [input, setInput] = useState("")
   const [isProcessing, setIsProcessing] = useState(false)
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
   const messagesEndRef = useRef<HTMLDivElement>(null)
+  const { setAgentInfo, agentInfo } = useAgent()
 
   // Use ref to prevent double execution in React Strict Mode
   const hasInitialized = useRef(false)
@@ -65,6 +69,43 @@ export function ChatInterface({ initialMessage, onFirstResponse, onBuildComplete
   const processUserMessage = async (message: string) => {
     setIsProcessing(true)
 
+    // If skipSteps is true (loading from history), just complete immediately
+    if (skipSteps) {
+      // Show a brief loading message
+      const loadingMessage: ChatMessage = {
+        id: generateMessageId("assistant"),
+        type: "assistant",
+        content: `Loading ${agentInfo.name}...`,
+        timestamp: new Date(),
+      }
+      setMessages([loadingMessage])
+      
+      // Trigger preview visibility
+      onFirstResponse()
+      
+      // Short delay for loading effect
+      await new Promise(resolve => setTimeout(resolve, 800))
+      
+      // Trigger build complete
+      onBuildComplete()
+      
+      // Show success message
+      await new Promise(resolve => setTimeout(resolve, 400))
+      setSuccessMessage(`✨ ${agentInfo.name} loaded successfully! You can test it in the chat tab or view its configuration.`)
+      
+      setIsProcessing(false)
+      isProcessingRef.current = false
+      return
+    }
+
+    // Normal flow: Extract agent name dynamically from user input
+    const extractedInfo = await extractAgentNameClient(message)
+    setAgentInfo({
+      name: extractedInfo.agentName,
+      type: extractedInfo.agentType,
+      description: extractedInfo.shortDescription,
+    })
+
     // Add user message with unique ID
     const userMessage: ChatMessage = {
       id: generateMessageId("user"),
@@ -74,12 +115,12 @@ export function ChatInterface({ initialMessage, onFirstResponse, onBuildComplete
     }
     setMessages(prev => [...prev, userMessage])
 
-    // Add AI response with unique ID
+    // Add AI response with unique ID (personalized with agent name)
     await new Promise(resolve => setTimeout(resolve, 800))
     const aiMessage: ChatMessage = {
       id: generateMessageId("assistant"),
       type: "assistant",
-      content: "Perfect! I'll build that agent for you. Let me analyze your requirements and create a comprehensive solution.",
+      content: `Perfect! I'll build the ${extractedInfo.agentName} for you. Let me analyze your requirements and create a comprehensive solution.`,
       timestamp: new Date(),
     }
     setMessages(prev => [...prev, aiMessage])

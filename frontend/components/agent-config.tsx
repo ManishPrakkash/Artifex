@@ -12,6 +12,7 @@ import { AgentGraph } from "./agent-graph"
 import { CodeEditor } from "./code-editor"
 import { TipTapEditor } from "./tiptap-editor"
 import type { AgentProjectConfig, AgentConfig as AgentConfigType, ToolConfig } from "@/types/agent-config"
+import { useAgent } from "@/contexts/agent-context"
 
 interface EditingState {
   type: "agent" | "tool" | null
@@ -20,6 +21,7 @@ interface EditingState {
 }
 
 export function AgentConfig() {
+  const { agentInfo } = useAgent()
   const [config, setConfig] = useState<AgentProjectConfig | null>(null)
   const [loading, setLoading] = useState(true)
   const [editingState, setEditingState] = useState<EditingState>({
@@ -35,7 +37,13 @@ export function AgentConfig() {
       try {
         const { fetchAgentConfig } = await import("@/lib/agent-api")
         const data = await fetchAgentConfig()
-        setConfig(data)
+        // Update project name and description with dynamic agent info
+        const updatedData = {
+          ...data,
+          project_name: agentInfo.name,
+          description: agentInfo.description,
+        }
+        setConfig(updatedData)
       } catch (error) {
         console.error("Failed to load config:", error)
       } finally {
@@ -44,7 +52,7 @@ export function AgentConfig() {
     }
 
     loadConfig()
-  }, [])
+  }, [agentInfo])
 
   const handleNodeClick = (nodeId: string, nodeType: "agent" | "tool") => {
     if (!config) return
