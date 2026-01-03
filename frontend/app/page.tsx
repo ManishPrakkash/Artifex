@@ -20,9 +20,10 @@ export default function Home() {
   const [mobileView, setMobileView] = useState<"chat" | "preview">("chat") // Mobile view toggle
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false) // Mobile menu state
   const [historyOpen, setHistoryOpen] = useState(false) // History sidebar state
-  const { agentInfo, setAgentInfo } = useAgent()
+  const { agentInfo, setAgentInfo, resetAgentInfo } = useAgent()
 
   const handleLandingSubmit = (message: string) => {
+    resetAgentInfo() // Clear any previous agent data when starting new
     setInitialMessage(message)
     setCurrentView("chat")
     setSkipSteps(false) // New agent creation, show steps
@@ -32,18 +33,41 @@ export default function Home() {
     setShowPreview(true)
   }
 
-  const handleBuildComplete = () => {
+  const handleBuildComplete = (agentName: string, agentType: string, agentDescription: string) => {
     setBuildComplete(true)
     
-    // Save to history when build completes
-    if (agentInfo.name && initialMessage) {
+    // Update agentInfo context with the extracted values
+    setAgentInfo({
+      name: agentName,
+      type: agentType,
+      description: agentDescription,
+    })
+    
+    // Save to history ONLY if this is a NEW agent (not loaded from history)
+    // If currentAgentId is already set, it means we loaded from history - don't duplicate
+    if (agentName && initialMessage && !currentAgentId) {
+      console.log("💾 Saving NEW agent to history:", {
+        name: agentName,
+        type: agentType,
+        description: agentDescription,
+        userPrompt: initialMessage
+      })
+      
       const savedAgent = addAgentToHistory({
-        name: agentInfo.name,
-        type: agentInfo.type,
-        description: agentInfo.description,
+        name: agentName,
+        type: agentType,
+        description: agentDescription,
         userPrompt: initialMessage,
       })
       setCurrentAgentId(savedAgent.id)
+      console.log("✅ Agent saved with ID:", savedAgent.id)
+    } else if (currentAgentId) {
+      console.log("ℹ️ Agent already in history with ID:", currentAgentId, "- skipping duplicate save")
+    } else {
+      console.warn("⚠️ Cannot save agent - missing name or prompt:", {
+        name: agentName,
+        hasPrompt: !!initialMessage
+      })
     }
     
     // Auto-switch to preview on mobile when build completes
@@ -52,6 +76,7 @@ export default function Home() {
 
   const handleCreateNewAgent = () => {
     // Reset all states to start fresh
+    resetAgentInfo() // Clear previous agent info
     setCurrentView("landing")
     setInitialMessage("")
     setShowPreview(false)
@@ -84,8 +109,13 @@ export default function Home() {
           onSelectAgent={handleSelectHistoryAgent} 
           currentAgentId={currentAgentId}
           isInBuildView={false}
+          isOpen={historyOpen}
+          onOpenChange={setHistoryOpen}
         />
-        <LandingPage onSubmit={handleLandingSubmit} />
+        <LandingPage 
+          onSubmit={handleLandingSubmit}
+          onOpenHistory={() => setHistoryOpen(true)}
+        />
       </>
     )
   }

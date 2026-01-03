@@ -14,6 +14,7 @@ interface AgentContextType {
   updateAgentName: (name: string) => void
   updateAgentType: (type: string) => void
   updateAgentDescription: (description: string) => void
+  resetAgentInfo: () => void
 }
 
 const defaultAgentInfo: AgentInfo = {
@@ -47,6 +48,14 @@ export function AgentProvider({ children }: { children: React.ReactNode }) {
     setAgentInfo({ ...agentInfo, description })
   }
 
+  const resetAgentInfo = () => {
+    setAgentInfoState(defaultAgentInfo)
+    // Clear from session storage
+    if (typeof window !== "undefined") {
+      sessionStorage.removeItem("agentInfo")
+    }
+  }
+
   // Load from session storage on mount
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -69,6 +78,7 @@ export function AgentProvider({ children }: { children: React.ReactNode }) {
         updateAgentName,
         updateAgentType,
         updateAgentDescription,
+        resetAgentInfo,
       }}
     >
       {children}

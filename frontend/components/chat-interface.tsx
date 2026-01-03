@@ -13,7 +13,7 @@ import { useAgent } from "@/contexts/agent-context"
 interface ChatInterfaceProps {
   initialMessage: string
   onFirstResponse: () => void
-  onBuildComplete: () => void
+  onBuildComplete: (agentName: string, agentType: string, agentDescription: string) => void
   skipSteps?: boolean
 }
 
@@ -86,8 +86,8 @@ export function ChatInterface({ initialMessage, onFirstResponse, onBuildComplete
       // Short delay for loading effect
       await new Promise(resolve => setTimeout(resolve, 800))
       
-      // Trigger build complete
-      onBuildComplete()
+      // Trigger build complete with current agent info
+      onBuildComplete(agentInfo.name, agentInfo.type, agentInfo.description)
       
       // Show success message
       await new Promise(resolve => setTimeout(resolve, 400))
@@ -158,7 +158,7 @@ export function ChatInterface({ initialMessage, onFirstResponse, onBuildComplete
 
     // All steps complete - wait a moment then trigger build animation on right panel
     await new Promise(resolve => setTimeout(resolve, 800))
-    onBuildComplete()
+    onBuildComplete(extractedInfo.agentName, extractedInfo.agentType, extractedInfo.shortDescription)
 
     // Show success message shortly after build starts (while building animation is running)
     await new Promise(resolve => setTimeout(resolve, 1200))

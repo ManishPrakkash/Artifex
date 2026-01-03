@@ -6,15 +6,16 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
-import { Send, Zap } from "lucide-react"
+import { Send, Zap, History } from "lucide-react"
 import { mockPrompts } from "@/lib/mock-api"
 import type { PromptSuggestion } from "@/types"
 
 interface LandingPageProps {
   onSubmit: (message: string) => void
+  onOpenHistory?: () => void
 }
 
-export function LandingPage({ onSubmit }: LandingPageProps) {
+export function LandingPage({ onSubmit, onOpenHistory }: LandingPageProps) {
   const [input, setInput] = useState("")
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -37,6 +38,17 @@ export function LandingPage({ onSubmit }: LandingPageProps) {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-4 sm:p-6 md:p-8">
+      {/* Mobile History Button - Top Left */}
+      {onOpenHistory && (
+        <Button
+          onClick={onOpenHistory}
+          size="sm"
+          className="lg:hidden fixed top-4 left-4 z-50 shadow-xl bg-slate-800/90 hover:bg-slate-700 border border-slate-700 text-white backdrop-blur-sm p-2"
+        >
+          <History className="w-5 h-5" />
+        </Button>
+      )}
+      
       <div className="w-full max-w-4xl mx-auto animate-fade-in">
         {/* Brand Header */}
         <div className="flex items-center justify-center mb-6 sm:mb-8">
