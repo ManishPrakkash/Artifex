@@ -192,7 +192,6 @@ export default function Home() {
           </div>
           
           <div className="flex items-center gap-2">
-            <UserProfile />
             <Button
               size="sm"
               variant="ghost"
