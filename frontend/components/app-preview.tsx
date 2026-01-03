@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { Progress } from "@/components/ui/progress"
-import { MessageSquare, Settings, Bot, Download, Github } from "lucide-react"
+import { MessageSquare, Settings, Bot, Download, Github, PlusCircle } from "lucide-react"
 import type { AppState } from "@/types"
 import { AgentChat } from "./agent-chat"
 import { AgentConfig } from "./agent-config"
@@ -24,9 +24,10 @@ const simulateBuildProgress = (onProgress: (progress: number) => void): void => 
 interface AppPreviewProps {
   isVisible: boolean
   buildComplete: boolean
+  onCreateNew: () => void
 }
 
-export function AppPreview({ isVisible, buildComplete }: AppPreviewProps) {
+export function AppPreview({ isVisible, buildComplete, onCreateNew }: AppPreviewProps) {
   const [appState, setAppState] = useState<AppState>({
     isBuilding: true,
     isComplete: false,
@@ -148,12 +149,21 @@ export function AppPreview({ isVisible, buildComplete }: AppPreviewProps) {
             <Button
               size="sm"
               variant="outline"
+              onClick={onCreateNew}
+              className="bg-gradient-to-r from-green-600 to-emerald-600 border-green-500 text-white hover:from-green-700 hover:to-emerald-700 hover:border-green-600 transition-all duration-200 text-xs px-3 py-1.5 h-8 font-medium shadow-lg shadow-green-500/20"
+            >
+              <PlusCircle className="w-3.5 h-3.5 mr-1.5" />
+              Create New Agent
+            </Button>
+            <Button
+              size="sm"
+              variant="outline"
               onClick={handleDownloadCode}
               disabled={downloading}
               className="bg-slate-800/50 border-slate-600 text-slate-200 hover:bg-slate-700 hover:border-slate-500 hover:text-white transition-all duration-200 text-xs px-3 py-1.5 h-8 font-medium"
             >
               <Download className="w-3.5 h-3.5 mr-1.5" />
-              {downloading ? "Generating..." : "Download Agent Code"}
+              {downloading ? "Generating..." : "Download Code"}
             </Button>
             <Button
               size="sm"
