@@ -8,6 +8,7 @@ import { Send, Bot, AlertCircle } from "lucide-react"
 import type { Message } from "@/types"
 import { useAgent } from "@/contexts/agent-context"
 import { geminiChatService, type AgentContext } from "@/lib/gemini-chat"
+import { generateTravelResponse } from "@/lib/travel-mock-data"
 
 // Counter for generating unique IDs
 let agentMessageCounter = 0
@@ -99,13 +100,54 @@ export function AgentChat() {
     }
 
     setMessages((prev) => [...prev, userMessage])
+    const userInput = input.trim()
     setInput("")
     setIsLoading(true)
     setError(null)
 
     try {
-      // Use Gemini to get response
-      const response = await geminiChatService.sendMessage(input.trim())
+      // Add 2 second thinking time
+      await new Promise(resolve => setTimeout(resolve, 2000))
+      
+      let response: string
+      
+      // Check if this is a travel/trip planner agent
+      const isTravelAgent = agentInfo.name.toLowerCase().includes('travel') || 
+                           agentInfo.name.toLowerCase().includes('trip') ||
+                           agentInfo.name.toLowerCase().includes('planner') ||
+                           agentInfo.description.toLowerCase().includes('travel') ||
+                           agentInfo.description.toLowerCase().includes('trip')
+      
+      if (isTravelAgent) {
+        // Use mock travel data for travel agents
+        const travelQuery = userInput.toLowerCase()
+        
+        // Check if it's a travel-related query
+        const isTravelQuery = travelQuery.includes('flight') || 
+                             travelQuery.includes('hotel') || 
+                             travelQuery.includes('activity') ||
+                             travelQuery.includes('activities') ||
+                             travelQuery.includes('book') ||
+                             travelQuery.includes('destination') ||
+                             travelQuery.includes('dubai') ||
+                             travelQuery.includes('paris') ||
+                             travelQuery.includes('london') ||
+                             travelQuery.includes('singapore') ||
+                             travelQuery.includes('where') ||
+                             travelQuery.includes('how') ||
+                             travelQuery.includes('when')
+        
+        if (isTravelQuery) {
+          // Generate response using mock data
+          response = generateTravelResponse(userInput)
+        } else {
+          // For non-travel queries, still use Gemini but with travel context
+          response = await geminiChatService.sendMessage(userInput)
+        }
+      } else {
+        // For non-travel agents, use Gemini normally
+        response = await geminiChatService.sendMessage(userInput)
+      }
 
       setMessages((prev) => [
         ...prev,
