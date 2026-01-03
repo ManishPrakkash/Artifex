@@ -1,0 +1,25 @@
+# Render Deployment Configuration for FastAPI Backend
+# https://render.com
+
+services:
+  - type: web
+    name: artifex-backend
+    env: python
+    region: oregon
+    plan: free
+    branch: main
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn api:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0
+      - key: GOOGLE_API_KEY
+        sync: false  # Set this manually in Render dashboard
+      - key: FIREBASE_SERVICE_ACCOUNT_JSON
+        sync: false  # Set this manually in Render dashboard (entire JSON as string)
+      - key: FRONTEND_URL
+        value: https://artifex-22767.web.app
+      - key: PORT
+        value: 8000
+    healthCheckPath: /
+    autoDeploy: true
