@@ -99,7 +99,10 @@ export function ChatInterface({ initialMessage, onFirstResponse, onBuildComplete
     }
 
     // Normal flow: Extract agent name dynamically from user input
+    console.log("🚀 Starting agent name extraction for:", message)
     const extractedInfo = await extractAgentNameClient(message)
+    console.log("📝 Extracted agent info:", extractedInfo)
+    
     setAgentInfo({
       name: extractedInfo.agentName,
       type: extractedInfo.agentType,
@@ -198,28 +201,28 @@ export function ChatInterface({ initialMessage, onFirstResponse, onBuildComplete
       </div>
 
       {/* Messages and Steps */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-6">
+      <div className="flex-1 overflow-y-auto p-2 sm:p-4 space-y-3 sm:space-y-6">
         {messages.map((message) => (
           <div key={message.id} className="animate-slide-in">
             {message.type === "user" && (
-              <div className="flex justify-end mb-4">
-                <div className="flex items-start gap-3 max-w-[85%]">
-                  <div className="bg-blue-600 text-white p-3 rounded-2xl rounded-br-sm text-sm">
+              <div className="flex justify-end mb-2 sm:mb-4">
+                <div className="flex items-start gap-2 sm:gap-3 max-w-[90%] sm:max-w-[85%]">
+                  <div className="bg-blue-600 text-white p-2 sm:p-3 rounded-2xl rounded-br-sm text-xs sm:text-sm">
                     {message.content}
                   </div>
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-orange-500 to-pink-500 flex items-center justify-center flex-shrink-0">
-                    <span className="text-xs font-bold text-white">U</span>
+                  <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-gradient-to-br from-orange-500 to-pink-500 flex items-center justify-center flex-shrink-0">
+                    <span className="text-[10px] sm:text-xs font-bold text-white">U</span>
                   </div>
                 </div>
               </div>
             )}
 
             {message.type === "assistant" && (
-              <div className="flex items-start gap-3 mb-4">
-                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center flex-shrink-0">
-                  <Zap className="w-4 h-4 text-white" />
+              <div className="flex items-start gap-2 sm:gap-3 mb-2 sm:mb-4">
+                <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center flex-shrink-0">
+                  <Zap className="w-3 h-3 sm:w-4 sm:h-4 text-white" />
                 </div>
-                <div className="bg-slate-800/60 text-slate-200 p-4 rounded-2xl rounded-bl-sm text-sm max-w-[85%] border border-slate-700/50">
+                <div className="bg-slate-800/60 text-slate-200 p-2 sm:p-4 rounded-2xl rounded-bl-sm text-xs sm:text-sm max-w-[90%] sm:max-w-[85%] border border-slate-700/50">
                   {message.content}
                 </div>
               </div>
@@ -252,24 +255,24 @@ export function ChatInterface({ initialMessage, onFirstResponse, onBuildComplete
       </div>
 
       {/* Input */}
-      <div className="p-4 border-t border-slate-800 flex-shrink-0">
-        <form onSubmit={handleSubmit} className="flex gap-2">
+      <div className="p-2 sm:p-4 border-t border-slate-800 flex-shrink-0">
+        <form onSubmit={handleSubmit} className="flex gap-1 sm:gap-2">
           <Textarea
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder={isProcessing ? "Agent is being built..." : "Continue the conversation..."}
             disabled={isProcessing}
-            className="flex-1 min-h-[44px] max-h-[120px] bg-slate-800 border-slate-700 text-white placeholder:text-slate-500 resize-none text-sm disabled:opacity-50"
+            className="flex-1 min-h-[40px] sm:min-h-[44px] max-h-[100px] sm:max-h-[120px] bg-slate-800 border-slate-700 text-white placeholder:text-slate-500 resize-none text-xs sm:text-sm disabled:opacity-50"
             rows={1}
           />
           <Button
             type="submit"
             size="sm"
             disabled={!input.trim() || isProcessing}
-            className="bg-blue-600 hover:bg-blue-700 text-white self-end h-11 px-4"
+            className="bg-blue-600 hover:bg-blue-700 text-white self-end h-10 sm:h-11 px-3 sm:px-4"
           >
-            <Send className="w-4 h-4" />
+            <Send className="w-3 h-3 sm:w-4 sm:h-4" />
           </Button>
         </form>
       </div>
