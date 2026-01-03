@@ -5,7 +5,7 @@
 
 import { initializeApp, getApps, type FirebaseApp } from "firebase/app"
 import { getAnalytics, type Analytics } from "firebase/analytics"
-import { getAuth, type Auth } from "firebase/auth"
+import { getAuth, GoogleAuthProvider, type Auth } from "firebase/auth"
 import { getFirestore, type Firestore } from "firebase/firestore"
 import { getStorage, type FirebaseStorage } from "firebase/storage"
 
@@ -46,6 +46,12 @@ if (typeof window !== "undefined") {
 
 // Initialize Auth
 auth = getAuth(app)
+
+// Initialize Google Auth Provider
+export const googleProvider = new GoogleAuthProvider()
+googleProvider.setCustomParameters({
+  prompt: 'select_account'
+})
 
 // Initialize Firestore
 db = getFirestore(app)

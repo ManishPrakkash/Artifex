@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge"
 import { Send, Zap, History } from "lucide-react"
 import { mockPrompts } from "@/lib/mock-api"
 import type { PromptSuggestion } from "@/types"
+import { UserProfile } from "@/components/user-profile"
 
 interface LandingPageProps {
   onSubmit: (message: string) => void
@@ -48,6 +49,11 @@ export function LandingPage({ onSubmit, onOpenHistory }: LandingPageProps) {
           <History className="w-5 h-5" />
         </Button>
       )}
+
+      {/* User Profile Button - Top Right */}
+      <div className="fixed top-4 right-4 z-50">
+        <UserProfile />
+      </div>
       
       <div className="w-full max-w-4xl mx-auto animate-fade-in">
         {/* Brand Header */}
