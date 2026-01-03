@@ -4,34 +4,10 @@ import type React from "react"
 import { useState, useRef, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
-import { Send, Bot } from "lucide-react"
+import { Send, Bot, AlertCircle } from "lucide-react"
 import type { Message } from "@/types"
 import { useAgent } from "@/contexts/agent-context"
-
-// Define response function locally to avoid module import issues
-const getAgentResponse = async (message: string): Promise<string> => {
-  await new Promise((resolve) => setTimeout(resolve, 1000 + Math.random() * 500))
-
-  const lowerMessage = message.toLowerCase()
-
-  if (lowerMessage.includes("help") || lowerMessage.includes("support")) {
-    return "I'd be happy to help you! Could you please describe your issue in more detail? I can assist with product inquiries, order tracking, returns, and general questions about our services."
-  }
-
-  if (lowerMessage.includes("order") || lowerMessage.includes("track")) {
-    return "I can help you track your order. Please provide your order number, and I'll look up the current status for you. You can find your order number in the confirmation email we sent you."
-  }
-
-  if (lowerMessage.includes("return") || lowerMessage.includes("refund")) {
-    return "I understand you'd like to process a return or refund. Our return policy allows returns within 30 days of purchase. Would you like me to start the return process for you?"
-  }
-
-  if (lowerMessage.includes("price") || lowerMessage.includes("cost")) {
-    return "I can help you with pricing information. Which product or service are you interested in learning more about?"
-  }
-
-  return "Thank you for your message! I'm here to assist you with any questions or concerns. How can I help you today?"
-}
+import { geminiChatService, type AgentContext } from "@/lib/gemini-chat"
 
 // Counter for generating unique IDs
 let agentMessageCounter = 0
@@ -42,17 +18,11 @@ const generateAgentMessageId = (prefix: string): string => {
 
 export function AgentChat() {
   const { agentInfo } = useAgent()
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: "welcome-message",
-      role: "assistant",
-      content:
-        `Hello! I'm your newly created ${agentInfo.name}. ${agentInfo.description}. How can I assist you today?`,
-      timestamp: new Date(),
-    },
-  ])
+  const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState("")
   const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [isInitialized, setIsInitialized] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
   const scrollToBottom = () => {
@@ -63,17 +33,59 @@ export function AgentChat() {
     scrollToBottom()
   }, [messages])
 
-  // Update welcome message when agent info changes
+  // Initialize Gemini chat when agent info is available
   useEffect(() => {
-    setMessages([
-      {
-        id: "welcome-message",
-        role: "assistant",
-        content: `Hello! I'm your newly created ${agentInfo.name}. ${agentInfo.description}. How can I assist you today?`,
-        timestamp: new Date(),
-      },
-    ])
-  }, [agentInfo])
+    if (agentInfo.name && !isInitialized) {
+      try {
+        // Initialize the Gemini service
+        const initialized = geminiChatService.initialize()
+
+        if (initialized) {
+          // Create agent context from agent info
+          const context: AgentContext = {
+            agentName: agentInfo.name,
+            purpose: agentInfo.description,
+            agentType: agentInfo.type,
+          }
+
+          // Start the chat session
+          geminiChatService.startChat(context)
+          setIsInitialized(true)
+          setError(null)
+
+          // Set welcome message
+          setMessages([
+            {
+              id: "welcome-message",
+              role: "assistant",
+              content: `Hello! I'm ${agentInfo.name}. ${agentInfo.description}. How can I assist you today?`,
+              timestamp: new Date(),
+            },
+          ])
+        } else {
+          // API key not configured - show error
+          setError("Gemini API key not configured. Please add NEXT_PUBLIC_GEMINI_API_KEY to .env.local")
+          setMessages([
+            {
+              id: "welcome-message",
+              role: "assistant",
+              content: `Hello! I'm ${agentInfo.name}. ${agentInfo.description}. (Note: Chat is in demo mode - API key not configured)`,
+              timestamp: new Date(),
+            },
+          ])
+        }
+      } catch (err) {
+        console.error("Failed to initialize Gemini:", err)
+        setError("Failed to initialize chat. Please check your API key.")
+      }
+    }
+  }, [agentInfo, isInitialized])
+
+  // Reset initialization when agent changes
+  useEffect(() => {
+    setIsInitialized(false)
+    setError(null)
+  }, [agentInfo.name])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -89,9 +101,12 @@ export function AgentChat() {
     setMessages((prev) => [...prev, userMessage])
     setInput("")
     setIsLoading(true)
+    setError(null)
 
     try {
-      const response = await getAgentResponse(input)
+      // Use Gemini to get response
+      const response = await geminiChatService.sendMessage(input.trim())
+
       setMessages((prev) => [
         ...prev,
         {
@@ -101,8 +116,21 @@ export function AgentChat() {
           timestamp: new Date(),
         },
       ])
-    } catch (error) {
-      console.error("Error getting agent response:", error)
+    } catch (err) {
+      console.error("Error getting agent response:", err)
+      const errorMessage = err instanceof Error ? err.message : "Failed to get response"
+      setError(errorMessage)
+
+      // Add error message to chat
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: generateAgentMessageId("error"),
+          role: "assistant",
+          content: `Sorry, I encountered an error: ${errorMessage}`,
+          timestamp: new Date(),
+        },
+      ])
     } finally {
       setIsLoading(false)
     }
@@ -130,6 +158,14 @@ export function AgentChat() {
         </div>
       </div>
 
+      {/* Error Banner */}
+      {error && (
+        <div className="mx-4 mt-4 p-3 bg-red-50 border border-red-200 rounded-lg flex items-center gap-2 text-red-700 text-sm">
+          <AlertCircle className="w-4 h-4 flex-shrink-0" />
+          <span>{error}</span>
+        </div>
+      )}
+
       {/* Messages - scrollable area */}
       <div className="flex-1 overflow-y-auto p-4 space-y-4 min-h-0">
         {messages.map((message) => (
@@ -145,8 +181,8 @@ export function AgentChat() {
             )}
             <div
               className={`max-w-[85%] p-3 rounded-lg text-sm leading-relaxed ${message.role === "user"
-                  ? "bg-blue-600 text-white rounded-br-sm"
-                  : "bg-white text-slate-800 rounded-bl-sm border border-slate-200"
+                ? "bg-blue-600 text-white rounded-br-sm"
+                : "bg-white text-slate-800 rounded-bl-sm border border-slate-200"
                 }`}
             >
               {message.content}
