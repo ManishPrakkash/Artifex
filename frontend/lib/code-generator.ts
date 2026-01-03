@@ -180,7 +180,12 @@ ${Object.entries(config.tools)
         const url = URL.createObjectURL(content)
         const link = document.createElement("a")
         link.href = url
-        link.download = `${config.project_name.toLowerCase().replace(/\s+/g, "-")}-agent.zip`
+        // Create clean filename from agent name: lowercase, replace spaces/special chars with hyphens
+        const cleanName = config.project_name
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, "-")
+            .replace(/^-+|-+$/g, "") // Remove leading/trailing hyphens
+        link.download = `${cleanName}-agent.zip`
         document.body.appendChild(link)
         link.click()
         document.body.removeChild(link)
