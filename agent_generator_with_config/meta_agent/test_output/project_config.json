@@ -1,0 +1,22 @@
+{
+  "project_name": "test_bmi_calculator",
+  "description": "Simple BMI calculator",
+  "version": "1.0.0",
+  "main_agent": "bmi_agent",
+  "agents": {
+    "bmi_agent": {
+      "name": "bmi_agent",
+      "type": "llm_agent",
+      "description": "Calculates BMI",
+      "tools": [],
+      "sub_agents": [],
+      "config": {},
+      "model": "gemini-pro",
+      "instruction": "You calculate BMI from weight and height."
+    }
+  },
+  "tools": {},
+  "requirements": [],
+  "environment_variables": {},
+  "environment_variables_example": {}
+}

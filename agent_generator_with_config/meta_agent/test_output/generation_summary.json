@@ -1,0 +1,19 @@
+{
+  "session_id": "test_session_123",
+  "project_name": "test_bmi_calculator",
+  "generated_at": "2026-01-02T14:31:14.769862",
+  "output_directory": "C:\\Users\\manis\\Downloads\\artifex\\agent_generator_with_config\\meta_agent\\test_output",
+  "generated_files": [
+    "agent.py",
+    "__init__.py",
+    "requirements.txt",
+    "README.md"
+  ],
+  "agent_count": 1,
+  "tool_count": 0,
+  "main_agent": "bmi_agent",
+  "agents": [
+    "bmi_agent"
+  ],
+  "tools": []
+}
