@@ -6,6 +6,7 @@ interface AgentInfo {
   name: string
   type: string
   description: string
+  userPrompt?: string // Original user prompt for domain matching
 }
 
 interface AgentContextType {

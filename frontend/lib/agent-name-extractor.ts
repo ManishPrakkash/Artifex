@@ -1,24 +1,47 @@
 /**
  * Agent Name Extractor using Gemini AI
  * Dynamically extracts agent type and name from user input
+ * Integrated with domain-based configuration system
  */
+
+import { matchPromptToDomain, getDomainConfiguration, type Domain } from './domain-matcher'
 
 interface AgentNameResult {
   agentName: string
   agentType: string
   shortDescription: string
+  domain?: Domain // Added domain information
+  domainNodes?: Array<{ id: string; label: string; description: string }> // Added domain nodes
 }
 
 /**
- * Extract agent name and type from user description using Gemini AI
+ * Extract agent name and type from user description using domain matching
  */
 export async function extractAgentName(userInput: string): Promise<AgentNameResult> {
-  // DIRECT TEXT ANALYSIS - No API calls
-  // Use smart keyword extraction as primary method
-  console.log("📝 Using direct text analysis for agent name extraction...")
+  // DOMAIN-BASED EXTRACTION - Uses domain registry for intelligent matching
+  console.log("📝 Using domain-based extraction for agent name...")
   console.log("   Input:", userInput)
-  const result = fallbackExtractAgentName(userInput)
-  console.log("   Result:", result)
+  
+  // Match user prompt to domain
+  const matchedDomain = matchPromptToDomain(userInput)
+  console.log("   🎯 Matched Domain:", matchedDomain.displayName)
+  
+  // Get the fallback extraction result
+  const fallbackResult = fallbackExtractAgentName(userInput)
+  
+  // Get domain configuration
+  const domainConfig = getDomainConfiguration(matchedDomain, fallbackResult.agentName)
+  
+  // Combine results with domain information
+  const result: AgentNameResult = {
+    agentName: fallbackResult.agentName,
+    agentType: fallbackResult.agentType,
+    shortDescription: matchedDomain.description,
+    domain: matchedDomain,
+    domainNodes: matchedDomain.nodes
+  }
+  
+  console.log("   ✅ Result:", result)
   return result
   
   /* API-based extraction (disabled to avoid rate limits and delays)
