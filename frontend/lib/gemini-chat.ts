@@ -76,6 +76,111 @@ function generateSmartMockResponse(userMessage: string, context: AgentContext): 
             `What specific topic would you like to explore?`;
     }
 
+    // ============== RESEARCH-SPECIFIC RESPONSES ==============
+
+    // Web Research queries
+    if (lowerMessage.includes('web research') || lowerMessage.includes('search online') || lowerMessage.includes('find information') || lowerMessage.includes('internet search')) {
+        return `I can help with your **web research** needs!\n\n` +
+            `**My approach to web research:**\n` +
+            `1. **Identify key search terms** from your query\n` +
+            `2. **Search multiple sources** for comprehensive coverage\n` +
+            `3. **Evaluate source credibility** and relevance\n` +
+            `4. **Synthesize findings** into actionable insights\n\n` +
+            `**What I can search for:**\n` +
+            `• News and current events\n` +
+            `• Technical documentation\n` +
+            `• Industry publications\n` +
+            `• Academic resources\n\n` +
+            `What topic would you like me to research?`;
+    }
+
+    // Literature Review queries
+    if (lowerMessage.includes('literature') || lowerMessage.includes('paper') || lowerMessage.includes('journal') || lowerMessage.includes('publication') || lowerMessage.includes('academic')) {
+        return `I specialize in **literature review** and academic research!\n\n` +
+            `**My literature review process:**\n` +
+            `1. **Search academic databases** for relevant papers\n` +
+            `2. **Analyze key findings** and methodologies\n` +
+            `3. **Identify research gaps** and trends\n` +
+            `4. **Synthesize insights** across multiple sources\n` +
+            `5. **Generate citations** in your preferred format\n\n` +
+            `**I can help with:**\n` +
+            `• Finding relevant academic papers\n` +
+            `• Summarizing research findings\n` +
+            `• Identifying key authors and themes\n` +
+            `• Creating literature review outlines\n\n` +
+            `What research topic are you exploring?`;
+    }
+
+    // Competitive Analysis queries
+    if (lowerMessage.includes('competitor') || lowerMessage.includes('competitive') || lowerMessage.includes('market analysis') || lowerMessage.includes('benchmark') || lowerMessage.includes('swot')) {
+        return `I can conduct **competitive analysis** for you!\n\n` +
+            `**My competitive analysis framework:**\n` +
+            `1. **Identify competitors** - direct and indirect\n` +
+            `2. **Analyze strengths & weaknesses** - SWOT analysis\n` +
+            `3. **Compare offerings** - products, pricing, features\n` +
+            `4. **Assess market positioning** - brand perception\n` +
+            `5. **Identify opportunities** - gaps and trends\n\n` +
+            `**Deliverables I can provide:**\n` +
+            `• Competitor profiles\n` +
+            `• Feature comparison matrices\n` +
+            `• Market positioning maps\n` +
+            `• Strategic recommendations\n\n` +
+            `Which industry or company would you like me to analyze?`;
+    }
+
+    // Policy & Law Research queries
+    if (lowerMessage.includes('policy') || lowerMessage.includes('law') || lowerMessage.includes('legal') || lowerMessage.includes('regulation') || lowerMessage.includes('compliance')) {
+        return `I can assist with **policy and legal research**!\n\n` +
+            `**My research capabilities:**\n` +
+            `1. **Regulatory analysis** - compliance requirements\n` +
+            `2. **Policy review** - government and industry policies\n` +
+            `3. **Legal framework** - applicable laws and statutes\n` +
+            `4. **Case precedents** - relevant rulings\n\n` +
+            `**Areas I can cover:**\n` +
+            `• Data privacy (GDPR, CCPA)\n` +
+            `• Industry regulations\n` +
+            `• Corporate governance\n` +
+            `• Intellectual property\n\n` +
+            `⚠️ *Note: This is informational research, not legal advice.*\n\n` +
+            `What policy or legal topic do you need researched?`;
+    }
+
+    // Academic Notes queries
+    if (lowerMessage.includes('note') || lowerMessage.includes('summary') || lowerMessage.includes('outline') || lowerMessage.includes('key points') || lowerMessage.includes('summarize')) {
+        return `I can help generate **academic notes** and summaries!\n\n` +
+            `**My note-taking approach:**\n` +
+            `1. **Extract key concepts** from the material\n` +
+            `2. **Create structured outlines** with hierarchies\n` +
+            `3. **Highlight important quotes** and data\n` +
+            `4. **Generate study guides** for review\n\n` +
+            `**Note formats available:**\n` +
+            `• Cornell note format\n` +
+            `• Mind maps / concept maps\n` +
+            `• Bullet point summaries\n` +
+            `• Flashcard-ready content\n` +
+            `• Chapter outlines\n\n` +
+            `What content would you like me to summarize?`;
+    }
+
+    // Fact Verification queries
+    if (lowerMessage.includes('fact') || lowerMessage.includes('verify') || lowerMessage.includes('check') || lowerMessage.includes('credib') || lowerMessage.includes('reliable') || lowerMessage.includes('source')) {
+        return `I can help with **fact verification** and source checking!\n\n` +
+            `**My verification process:**\n` +
+            `1. **Identify claims** that need verification\n` +
+            `2. **Cross-reference** with multiple reliable sources\n` +
+            `3. **Evaluate source credibility** - authority, bias, date\n` +
+            `4. **Rate confidence level** in the information\n\n` +
+            `**Credibility factors I assess:**\n` +
+            `• Source authority and expertise\n` +
+            `• Publication date and currency\n` +
+            `• Editorial standards\n` +
+            `• Corroboration across sources\n` +
+            `• Potential conflicts of interest\n\n` +
+            `What claim or information would you like me to verify?`;
+    }
+
+    // ============== END RESEARCH-SPECIFIC ==============
+
     // Generate response based on matching keywords from purpose
     const matchedTopics = findMatchingTopics(lowerMessage, purpose);
 
