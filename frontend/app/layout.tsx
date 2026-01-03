@@ -1,9 +1,10 @@
 import type { Metadata } from 'next'
 import './globals.css'
+import { AgentProvider } from '@/contexts/agent-context'
 
 export const metadata: Metadata = {
   title: 'ARTIFEX - Agent Builder',
-  description: 'Created with v0',
+  description: 'AI-Powered Agent Creation Platform',
   generator: 'v0.dev',
 }
 
@@ -14,7 +15,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <AgentProvider>{children}</AgentProvider>
+      </body>
     </html>
   )
 }

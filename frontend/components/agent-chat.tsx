@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { Send, Bot } from "lucide-react"
 import type { Message } from "@/types"
+import { useAgent } from "@/contexts/agent-context"
 
 // Define response function locally to avoid module import issues
 const getAgentResponse = async (message: string): Promise<string> => {
@@ -40,12 +41,13 @@ const generateAgentMessageId = (prefix: string): string => {
 }
 
 export function AgentChat() {
+  const { agentInfo } = useAgent()
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "welcome-message",
       role: "assistant",
       content:
-        "Hello! I'm your newly created AI agent. I'm here to help with customer support inquiries. How can I assist you today?",
+        `Hello! I'm your newly created ${agentInfo.name}. ${agentInfo.description}. How can I assist you today?`,
       timestamp: new Date(),
     },
   ])
@@ -60,6 +62,18 @@ export function AgentChat() {
   useEffect(() => {
     scrollToBottom()
   }, [messages])
+
+  // Update welcome message when agent info changes
+  useEffect(() => {
+    setMessages([
+      {
+        id: "welcome-message",
+        role: "assistant",
+        content: `Hello! I'm your newly created ${agentInfo.name}. ${agentInfo.description}. How can I assist you today?`,
+        timestamp: new Date(),
+      },
+    ])
+  }, [agentInfo])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -110,7 +124,7 @@ export function AgentChat() {
             <Bot className="w-4 h-4 text-white" />
           </div>
           <div>
-            <h3 className="text-sm font-semibold text-slate-900">Customer Support Agent</h3>
+            <h3 className="text-sm font-semibold text-slate-900">{agentInfo.name}</h3>
             <p className="text-xs text-slate-500">Test your AI agent</p>
           </div>
         </div>
