@@ -7,8 +7,11 @@ import { AppPreview } from "@/components/app-preview"
 import { AgentHistorySidebar } from "@/components/agent-history-sidebar"
 import { addAgentToHistory, type AgentHistoryItem } from "@/lib/agent-history"
 import { useAgent } from "@/contexts/agent-context"
+import { useAuth } from "@/contexts/auth-context"
 import { Menu, X, MessageSquare, Bot, History } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { UserProfile } from "@/components/user-profile"
+import { AuthModal } from "@/components/auth-modal"
 
 export default function Home() {
   const [currentView, setCurrentView] = useState<"landing" | "chat">("landing")
@@ -20,9 +23,17 @@ export default function Home() {
   const [mobileView, setMobileView] = useState<"chat" | "preview">("chat") // Mobile view toggle
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false) // Mobile menu state
   const [historyOpen, setHistoryOpen] = useState(false) // History sidebar state
+  const [showAuthModal, setShowAuthModal] = useState(false) // Auth modal state
   const { agentInfo, setAgentInfo, resetAgentInfo } = useAgent()
+  const { user, loading } = useAuth()
 
   const handleLandingSubmit = (message: string) => {
+    // Check if user is authenticated
+    if (!user) {
+      setShowAuthModal(true)
+      return
+    }
+    
     resetAgentInfo() // Clear any previous agent data when starting new
     setInitialMessage(message)
     setCurrentView("chat")
@@ -87,6 +98,13 @@ export default function Home() {
   }
 
   const handleSelectHistoryAgent = (agent: AgentHistoryItem & { isFromHistory?: boolean }) => {
+    // Check if user is authenticated
+    if (!user) {
+      setShowAuthModal(true)
+      setHistoryOpen(false)
+      return
+    }
+    
     // Load the selected agent from history
     setAgentInfo({
       name: agent.name,
@@ -102,6 +120,18 @@ export default function Home() {
     setMobileView("preview") // Show preview directly on mobile for history agents
   }
 
+  // Show loading screen while checking auth state
+  if (loading) {
+    return (
+      <div className="h-screen w-screen flex items-center justify-center bg-slate-900">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+          <p className="text-slate-400 text-sm">Loading...</p>
+        </div>
+      </div>
+    )
+  }
+
   if (currentView === "landing") {
     return (
       <>
@@ -114,7 +144,18 @@ export default function Home() {
         />
         <LandingPage 
           onSubmit={handleLandingSubmit}
-          onOpenHistory={() => setHistoryOpen(true)}
+          onOpenHistory={() => {
+            // Check if user is authenticated before opening history
+            if (!user) {
+              setShowAuthModal(true)
+              return
+            }
+            setHistoryOpen(true)
+          }}
+        />
+        <AuthModal 
+          isOpen={showAuthModal}
+          onClose={() => setShowAuthModal(false)}
         />
       </>
     )
@@ -150,14 +191,17 @@ export default function Home() {
             </div>
           </div>
           
-          <Button
-            size="sm"
-            variant="ghost"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="text-slate-300 hover:text-white hover:bg-slate-800 p-2"
-          >
-            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-          </Button>
+          <div className="flex items-center gap-2">
+            <UserProfile />
+            <Button
+              size="sm"
+              variant="ghost"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="text-slate-300 hover:text-white hover:bg-slate-800 p-2"
+            >
+              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </Button>
+          </div>
         </div>
 
         {/* Mobile Menu Backdrop */}
@@ -227,6 +271,12 @@ export default function Home() {
               
               <button
                 onClick={() => {
+                  // Check if user is authenticated before opening history
+                  if (!user) {
+                    setShowAuthModal(true)
+                    setMobileMenuOpen(false)
+                    return
+                  }
                   setHistoryOpen(true)
                   setMobileMenuOpen(false)
                 }}
@@ -261,6 +311,12 @@ export default function Home() {
           </div>
         </div>
       </div>
+      
+      {/* Auth Modal for build view */}
+      <AuthModal 
+        isOpen={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
+      />
     </>
   )
 }

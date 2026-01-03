@@ -170,6 +170,7 @@ export function AppPreview({ isVisible, buildComplete, onCreateNew }: AppPreview
             <Button
               size="sm"
               variant="outline"
+              onClick={() => window.open('https://github.com/ManishPrakkash/Artifex', '_blank')}
               className="bg-slate-800/50 border-slate-600 text-slate-200 hover:bg-slate-700 hover:border-slate-500 hover:text-white transition-all duration-200 text-[10px] sm:text-xs px-2 sm:px-3 py-1 sm:py-1.5 h-7 sm:h-8 font-medium whitespace-nowrap flex-1 sm:flex-initial"
             >
               <Github className="w-3 h-3 sm:w-3.5 sm:h-3.5 mr-1 sm:mr-1.5" />
