@@ -59,12 +59,12 @@ export function AgentHistorySidebar({ onSelectAgent, currentAgentId, isInBuildVi
 
   return (
     <>
-      {/* Toggle Button - Only visible on desktop when sidebar is closed */}
+      {/* Toggle Button - Only visible on desktop when sidebar is closed and NOT in mobile view */}
       {!isOpen && (
         <Button
           onClick={() => setIsOpen(true)}
           size="sm"
-          className={`hidden lg:flex fixed ${isInBuildView ? 'top-4 left-4' : 'top-4 left-4'} z-50 shadow-xl bg-slate-800/90 hover:bg-slate-700 border border-slate-700 text-white backdrop-blur-sm p-2`}
+          className={`hidden lg:flex fixed ${isInBuildView ? 'top-4 left-4' : 'top-4 left-4'} z-40 shadow-xl bg-slate-800/90 hover:bg-slate-700 border border-slate-700 text-white backdrop-blur-sm p-2`}
         >
           <History className="w-5 h-5" />
         </Button>
@@ -72,7 +72,7 @@ export function AgentHistorySidebar({ onSelectAgent, currentAgentId, isInBuildVi
 
       {/* Sidebar */}
       <div
-        className={`fixed top-0 left-0 h-full w-full sm:w-80 bg-slate-900 border-r border-slate-800 z-40 transition-transform duration-300 ${
+        className={`fixed top-0 left-0 h-full w-full sm:w-80 bg-slate-900 border-r border-slate-800 z-50 transition-transform duration-300 ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
@@ -176,7 +176,7 @@ export function AgentHistorySidebar({ onSelectAgent, currentAgentId, isInBuildVi
       {/* Overlay */}
       {isOpen && (
         <div
-          className="fixed inset-0 bg-black/50 z-30"
+          className="fixed inset-0 bg-black/50 z-40"
           onClick={() => setIsOpen(false)}
         />
       )}
